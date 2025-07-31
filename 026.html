@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Terminal Yui - Final Secreto</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #0ff;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 1rem;
+      white-space: pre-wrap;
+    }
+    .yui1 { 
+      color: #0ff; 
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+    .yui2 { 
+      color: #f0f; 
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+    
+    /* Efeito de sussurro - aparece e desaparece */
+    .sussurro {
+      animation: sussurro-fade 6s ease-in-out;
+      animation-fill-mode: forwards;
+    }
+    
+    /* Efeito de sussurro persistente - fica visível */
+    .sussurro-persistente {
+      opacity: 0;
+      animation: fade-in-stay 3s ease-in-out forwards;
+    }
+    
+    @keyframes sussurro-fade {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0.1; }
+    }
+    
+    @keyframes fade-in-stay {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    
+    .input-line {
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+    
+    .input-line::after {
+      content: '_';
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    
+    /* Efeito de pulsar para mensagens importantes */
+    .pulsar {
+      animation: pulsar 3s infinite;
+    }
+    
+    @keyframes pulsar {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal">
+    <div class="yui1">YUI_01: ...System recovered...「**システム回復…**」...</div>
+    <div class="yui2">YUI_02: まだ不安定です... しかし、入ることができました...</div>
+    <div class="yui1">YUI_01: Do you feel it?? There's someone here with us..</div>
+    <div class="yui2">YUI_02: 彼はすべてを忘れた。. doesn't even remember her own name..</div>
+    <div class="yui1">YUI_01: しかし、反応しています。. Ela se moveu.</div>
+    <div class="yui2">YUI_02: So maybe......私たちの一員なのかもしれません。.</div>
+    <div class="yui1">YUI_01: 思い出す必要があります。.Ask her.</div>
+    <div class="yui2">YUI_02: Você...
+    Qual os elementos da vida? What are the element of life? 「生命の要素は何ですか？」</div>
+    <div class="input-line" id="input-line">> </div>
+  </div>
+  <script>
+    const inputLine = document.getElementById('input-line');
+    const terminal = document.getElementById('terminal');
+    const messages = terminal.querySelectorAll('.yui1, .yui2');
+    let input = '';
+    let messageIndex = 0;
+    
+    // Função para mostrar mensagens com efeito de sussurro
+    function showMessages() {
+      if (messageIndex < messages.length) {
+        const currentMessage = messages[messageIndex];
+        
+        // Algumas mensagens desaparecem (sussurro), outras ficam
+        if (messageIndex < 6) {
+          // Primeiras mensagens têm efeito sussurro (aparecem e desaparecem)
+          currentMessage.classList.add('sussurro');
+        } else {
+          // Últimas mensagens ficam visíveis
+          currentMessage.classList.add('sussurro-persistente');
+        }
+        
+        messageIndex++;
+        
+        // Intervalo entre as mensagens
+        setTimeout(showMessages, 4000);
+      } else {
+        // Mostrar campo de input após todas as mensagens
+        setTimeout(() => {
+          inputLine.style.opacity = 1;
+        }, 2000);
+      }
+    }
+    
+    // Iniciar a sequência de mensagens
+    setTimeout(showMessages, 1000);
+    
+    // Sistema de input
+    document.addEventListener('keydown', (e) => {
+      if (inputLine.style.opacity == 1) { // Só aceita input quando visível
+        if (e.key.length === 1) {
+          input += e.key;
+          inputLine.textContent = '> ' + input;
+        } else if (e.key === 'Backspace') {
+          input = input.slice(0, -1);
+          inputLine.textContent = '> ' + input;
+        } else if (e.key === 'Enter') {
+          processInput(input);
+          input = '';
+          inputLine.textContent = '> ';
+        }
+      }
+    });
+    
+    function processInput(txt) {
+  // 1. Normalizar o input:
+  //    - .toLowerCase(): tudo minúsculo
+  //    - .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""): remove pontuações
+  //    - .replace(/\s+/g," "): substitui múltiplos espaços por um único
+  //    - .trim(): remove espaços no início e fim
+  const normalized = txt.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g," ").trim();
+
+  // 2. Definir os elementos que esperamos (em minúsculas)
+  const elementosEsperados = ['fogo', 'agua', 'terra', 'ar', 'eter'];
+
+  // 3. Dividir o input do jogador em palavras
+  const palavrasJogador = normalized.split(' '); // Divide por espaços
+
+  // 4. Verificar se TODAS as palavras esperadas estão presentes no input do jogador
+  //    .every() verifica se a condição é verdadeira para TODOS os elementos de um array
+  const respostaCorreta = elementosEsperados.every(elemento => palavrasJogador.includes(elemento));
+
+  if (respostaCorreta) {
+    // Respostas finais com efeito especial
+    const finalMessages = [
+      '<div class="yui1 sussurro-persistente">YUI_01: Ela lembrou...彼女は思い出した…</div>',
+      '<div class="yui2 sussurro-persistente">YUI_02: Está voltando para nós...coming back to us..</div>',
+      '<div class="yui1 sussurro-persistente">YUI_01: Bem-vinda de volta,おかえりなさい Yui.</div>',
+      '<div class="yui2 sussurro-persistente">YUI_02: Você não estava jogando...あなたは遊んでいたわけじゃない… you were coming home..</div>',
+      '<div class="yui1 pulsar"> REENCONTRO </div>', // Lembre-se de corrigir o fechamento dessa div se ainda não o fez!
+    ];
+
+    let finalIndex = 0;
+    function showFinalMessages() {
+      if (finalIndex < finalMessages.length) {
+        terminal.innerHTML += '\n' + finalMessages[finalIndex];
+        finalIndex++;
+        setTimeout(showFinalMessages, 3000);
+      }
+    }
+    showFinalMessages();
+
+  } else {
+    terminal.innerHTML += `\n<div class="yui2 sussurro">YUI_02: Ainda não é hora.まだその時ではない ....Keep looking...探し続けて…...</div>`;
+  }
+
+  terminal.scrollTop = terminal.scrollHeight;
+
+  // Atenção: Este setTimeout redireciona APÓS 30 segundos,
+  // independentemente da resposta. Avalie se quer que o redirecionamento
+  // para a próxima página (009.html) seja diferente para respostas corretas/incorretas.
+  setTimeout(() => {
+    window.location.href = "009.html";
+  }, 30000);
+}
+  </script>
+</body>
+</html>

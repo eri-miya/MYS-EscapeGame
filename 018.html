@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elementos</title>
+  <style>
+    @keyframes elementosCores {
+      0% { background: #ff385c; }    /* fogo - vermelho vivo */
+      20% { background: #2196f3; }   /* água - azul */
+      40% { background: #4caf50; }   /* terra - verde */
+      60% { background: #b0bec5; }   /* ar - cinza claro */
+      80% { background: #9c27b0; }   /* éter - roxo */
+      100% { background: #ff385c; }  /* volta fogo */
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Courier New', Courier, monospace;
+      color: #ecf0f1;
+      animation: elementosCores 30s linear infinite;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .elementos {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 30px 0;
+    }
+
+    .elementos span {
+      font-size: 4rem;
+      cursor: default;
+      user-select: none;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    }
+
+    p {
+      max-width: 600px;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      margin: 0 20px;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: rgba(255 255 255 / 0.7);
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mês 5 – Caos do Projeto em Grupo</h1>
+
+  <div class="elementos" aria-label="Os cinco elementos">
+    <span title="Fogo" style="color:#ff385c;">🔥</span>
+    <span title="Água" style="color:#2196f3;">🌊</span>
+    <span title="Terra" style="color:#4caf50;">🌿</span>
+    <span title="Ar" style="color:#b0bec5;">🌬️</span>
+    <span title="Éter" style="color:#9c27b0;">✨</span>
+  </div>
+
+  <p>
+    Esses são os elementos que nos guiam, que dão sentido à vida e à história que criamos juntos.<br>
+    Como o fogo que aquece, a água que flui,<br>
+    a terra que sustenta, o ar que inspira,<br>
+    e o éter, o elo invisível que conecta tudo.<br><br>
+    Que possamos continuar a crescer e aprender,<br>
+    sempre guiados pela luz que carregamos dentro.
+  </p>
+
+  <footer>
+    Criado com carinho por あめゆい (Ameyui) ✨ 大好き
+  </footer>
+  <script>
+   setTimeout(() => {
+        window.location.href = "026.html";
+      }, 21000);
+    }
+  </script>
+</body>
+</html>

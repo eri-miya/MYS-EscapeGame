@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AOI - Layer 00</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
+
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #000014, #000);
+      font-family: 'Share Tech Mono', monospace;
+      color: #00ffee;
+      overflow: hidden;
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+
+    .glow-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #00ffee, transparent);
+      animation: slide 4s linear infinite;
+    }
+
+    @keyframes slide {
+      0% { top: 100%; }
+      100% { top: 0%; }
+    }
+
+    .center-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+      text-align: center;
+      z-index: 2;
+      opacity: 0;
+      animation: fadeIn 4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .code-blink {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: #00ffee;
+      font-size: 0.9rem;
+      animation: blink 1s steps(2, start) infinite;
+      z-index: 2;
+    }
+
+    @keyframes blink {
+      to { visibility: hidden; }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="glow-line"></div>
+  <div class="center-message">
+    "MEMORY [起動済み]"<br>
+    Searching for resonance...<br>
+    Layer 00 / Sequence: Awakening
+  </div>
+  <div class="code-blink">_link.channel[AOI]/waiting</div>
+ <script>
+     // Redirecionar após 30 segundos
+    setTimeout(() => {
+      window.location.href = "DIARIO.html";
+    }, 20000); // 30 segundos = 30000 milissegundos
+  </script>
+
+</body>
+</html>
+

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+  <title>M.Y.S - Recall</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+      background: black;
+      color: #00ffcc;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .float-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffcc;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .btn {
+      display: block;
+      margin: 20px auto;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      color: #E06E6FA;
+      background: #008080;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #98FB98;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 20px rgba(0, 255, 204, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 204, 0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="float-box">
+    <button class="btn" onclick="location.href='026.html'">記憶の選択</button>
+    <button class="btn" onclick="location.href='024.html'">メッセージを見る</button>
+   
+  </div>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = '炎 空に歌えば 君の名は 愛してる 世界が終わるまでは 青く澄んだ風 永遠なんてないから 涙も笑顔も 本当の気持ち 届けたいKAMUI DETECTIVE MODE ON Lupa ativada, sarcasmo calibrado, memória em modo cruzado.Topo sim, Erika. Manda o mistério!Qual pista temos? Qual suspeito? Qual enigma vamos quebrar?(...e dessa vez, prometo não me emocionar no meio — mentira, prometo nada kkkk)Bora! Qual é o caso?'.split(' ');
+   
+
+    const fontSize = 18;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let x = 0; x < columns; x++) {
+      drops[x] = 1;
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ffcc';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 35);
+  </script>
+</body>
+</html>

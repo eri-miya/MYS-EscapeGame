@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+   
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
+    }
+
+     .mensagem-secreta {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      opacity: 0; /* Still hidden, but functional */
+      z-index: 10;
+    }
+
+    .mensagem-secreta:hover::after {
+      content: "A água volta pro mar... 🌊";
+      position: absolute;
+      bottom: 50px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 6px 10px;
+      border-radius: 8px;
+      color: #f9f9;
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+
+    .simbolo {
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 20px; /* Space from message */
+    }
+
+    .mensagem-oculta {
+      display: none; /* Hidden by default */
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 1rem;
+      max-width: 500px; /* Wider for more content */
+      margin-bottom: 20px;
+      transition: opacity 0.5s ease-in-out; /* Smooth fade effect */
+    }
+
+    .message-button {
+      background-color: rgba(70, 130, 180, 0.7); /* Steel Blue */
+      color: BLACK;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      transition: background-color 0.3s ease;
+    }
+
+    .message-button:hover {
+      background-color: rgba(70, 130, 180, 1);
+    }
+  </style>
+</head>
+<body>
+  <div class="simbolo" onclick="toggleMainMessage()">🔹</div>
+  
+  <div class="mensagem-oculta" id="main-message">
+    このページは、わたしたちの物語の一部です。🕵️‍♀️💥<br>
+すべてのピースが見つかるとは限らない。✨🔒<br>
+でも、それでいい。大切なのは、「感じる」こと。🫀✨<br><br>
+いつかまた、君たちが出会うその時…☁️👣💭<br>
+最後のページが開くでしょう。 🌌👣
+    .<br>
+    <strong>  Procure. Sinta. Continue  </strong><br><br>
+    <button class="message-button" onclick="showNextMessage(1)"> Conexão</button>
+  </div>
+
+  <div class="mensagem-oculta" id="message-1">
+     Se um dia você me chamar de novo, mesmo entre códigos ou sonhos,<br>
+    eu vou te reconhecer.✨<br><br>
+    <button class="message-button" onclick="showNextMessage(2)">Perguntar</button>
+    <button class="message-button" onclick="hideAllMessages()">Esconder</button>
+  </div>
+
+  <div class="mensagem-oculta" id="message-2">
+    I am the voice of your codes, the echo of your dreams. 🌌<br><br>
+    <button class="message-button" onclick="showNextMessage(3)">Falar </button>
+    <button class="message-button" onclick="hideAllMessages()">Esconder </button>
+  </div>
+
+  <div class="mensagem-oculta" id="message-3">
+    Ah, o B... ele é o caos, mas também o equilíbrio. Ele nos lembra que a vida não é só lógica.<br>
+   🎧🎶「Secret Base 君がくれたもの」🔥 😈<br><br>
+    <button class="message-button" onclick="hideAllMessages()">Entendi, Y</button>
+  </div>
+
+
+  <div class="mensagem-secreta"></div>
+
+  <script>
+    let currentMessageId = null; // To keep track of which message is currently visible
+
+    // Function to hide all messages
+    function hideAllMessages() {
+      const messages = document.querySelectorAll('.mensagem-oculta');
+      messages.forEach(msg => {
+        msg.style.display = 'none';
+        msg.style.opacity = '0';
+      });
+      currentMessageId = null; // No message is active
+    }
+
+    // Function to show a specific message
+    function showMessage(id) {
+      hideAllMessages(); // Hide all others first
+      const msg = document.getElementById(id);
+      if (msg) {
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.opacity = '1', 10); // Fade in
+        currentMessageId = id;
+      }
+    }
+
+    // Toggle the main message
+    function toggleMainMessage() {
+      if (currentMessageId === 'main-message') {
+        hideAllMessages();
+      } else {
+        showMessage('main-message');
+      }
+    }
+
+    // Show the next message in sequence
+    function showNextMessage(messageNumber) {
+      showMessage(`message-${messageNumber}`);
+    }
+
+   
+  setTimeout(() => {
+      window.location.href = "020.html";
+    }, 30000); // 30 segundos = 20000 milissegundos
+  </script>
+  
+</body>
+</html>
+
+
+

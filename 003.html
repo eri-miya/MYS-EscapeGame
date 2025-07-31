@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>003 - Chave</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle, #000000, #111111 70%);
+            color: #ccc;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            opacity: 0.7;
+            margin-bottom: 40px;
+            text-shadow: 0 0 5px #888;
+            max-width: 90%;
+        }
+
+        .doors {
+            display: flex;
+            gap: clamp(20px, 5vw, 40px);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .door {
+            width: clamp(100px, 12vw, 90px);
+            height: clamp(160px, 15vh, 120px);
+            background: #222;
+            border: 2px solid #444;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .door:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 15px #00ffffaa;
+            transform: translateY(-3px);
+        }
+
+        .door:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px #00ffff66;
+        }
+
+        .door::after {
+            content: "🚪";
+            font-size: clamp(80px, 10vw, 50px);
+            opacity: 0.6;
+        }
+
+        .whisper {
+            position: absolute;
+            font-size: clamp(0.8rem, 2.5vw, 1.5rem);
+            color: #666;
+            opacity: 0;
+            animation: whisper 6s ease-in-out infinite;
+            max-width: 90%;
+            line-height: 1.4;
+        }
+
+        .whisper-top {
+            top: 60px;
+            animation-delay: 0s;
+        }
+
+        .whisper-bottom {
+            bottom: 60px;
+            animation-delay: 3s;
+        }
+
+        @keyframes whisper {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        .inventory {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            color: #00ccff;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #00ccff33;
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+
+        /* Loading effect */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ffff;
+            font-size: 1rem;
+            opacity: 0;
+            z-index: 1000;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .doors {
+                gap: 15px;
+            }
+
+            .inventory {
+                top: 10px;
+                right: 10px;
+                font-size: 0.7rem;
+                padding: 6px 10px;
+            }
+
+            .whisper {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loadingText">Loading...</div>
+
+    <div class="inventory" id="inventario">🎒</div>
+
+    <h1 class="whisper whisper-top">「A chave não ilumina🕯️… mas abre o caminho.」</h1>
+
+    <div class="doors">
+        <div class="door" data-target="000.html" title="Voltar"></div>
+        <div class="door" data-target="004.html" title="Avançar"></div>
+        <div class="door" data-target="002.html" title="Retornar"></div>
+    </div>
+
+    <div class="whisper whisper-bottom">Yui:🌒 "光が必ずしも導くとは限らない。..."</div>
+
+    <script>
+        class InventoryManager {
+            constructor() {
+                this.inventory = JSON.parse(localStorage.getItem('gameInventory')) || [];
+                this.invDiv = document.getElementById("inventario");
+                this.loadingText = document.getElementById("loadingText");
+                
+                this.init();
+            }
+
+            init() {
+                this.showLoading();
+                this.updateInventoryDisplay();
+                this.setupDoorEvents();
+                
+                // Simula o carregamento da página
+                setTimeout(() => {
+                    this.hideLoading();
+                }, 800);
+
+                // Chave só é adicionada quando o jogador fizer algo específico
+                // Remova os comentários abaixo APENAS se quiser dar a chave automaticamente UMA VEZ
+                 this.addKeyIfFirstVisit();
+            }
+
+            showLoading() {
+                this.loadingText.style.opacity = 1;
+            }
+
+            hideLoading() {
+                this.loadingText.style.opacity = 0;
+            }
+
+            updateInventoryDisplay() {
+                if (this.inventory.length === 0) {
+                    this.invDiv.textContent = '🎒 Vazio';
+                } else {
+                    this.invDiv.textContent = '🎒 ' + this.inventory.join(', ');
+                }
+            }
+
+           addItemToInventory(item) {
+                if (!this.inventory.includes(item)) {
+                   this.inventory.push(item);
+                  localStorage.setItem('gameInventory', JSON.stringify(this.inventory));
+                    this.updateInventoryDisplay();
+                    console.log(`Item '${item}' adicionado ao inventário.`);
+                    
+                    // Efeito visual quando adiciona item
+                    this.invDiv.style.animation = 'none';
+                    setTimeout(() => {
+                        this.invDiv.style.animation = 'pulse 0.5s ease-in-out';
+                    }, 10);
+                } else {
+                    console.log(`Item '${item}' já está no inventário.`);
+                }
+            }
+
+            setupDoorEvents() {
+                const doors = document.querySelectorAll('.door');
+                
+                doors.forEach(door => {
+                    door.addEventListener('click', () => {
+                        const target = door.getAttribute('data-target');
+                        if (target) {
+                            this.goTo(target);
+                        }
+                    });
+
+                    // Adicionar efeito de hover melhorado
+                    door.addEventListener('mouseenter', () => {
+                        door.style.borderColor = '#00ffff';
+                        door.style.boxShadow = '0 0 15px #00ffffaa';
+                    });
+
+                    door.addEventListener('mouseleave', () => {
+                        door.style.borderColor = '#444';
+                        door.style.boxShadow = 'none';
+                    });
+                });
+            }
+
+            goTo(path) {
+                // Add transition effect
+                document.body.style.opacity = '0.5';
+                document.body.style.transition = 'opacity 0.3s ease-out';
+                
+                setTimeout(() => {
+                    window.location.href = path;
+                }, 300);
+            }
+        }
+
+        // Adicionar estilo de pulse para o inventário
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            new InventoryManager();
+        });
+
+        // Tratamento de erro para localStorage
+        window.addEventListener('error', (e) => {
+            console.warn('Erro capturado:', e.error);
+        });
+    </script>
+</body>
+</html>

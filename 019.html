@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-br"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.Y.S Portais do Tempo ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem;
+            /* SEU BACKGROUND ANIMADO ORIGINAL - MANTIDO! */
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            color: #EE82EE;
+            font-family: 'Sawarabi Mincho', sans-serif; /* Mudei para Sawarabi Mincho como padrão para consistência */
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex; /* Adicionado para centralizar conteúdo */
+            flex-direction: column; /* Conteúdo em coluna */
+            align-items: center; /* Centraliza horizontalmente */
+            min-height: 100vh; /* Garante que o body ocupa a tela toda */
+            box-sizing: border-box; /* Inclui padding no tamanho total */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem; /* Levemente maior */
+            margin-bottom: 2.5rem; /* Mais espaço */
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px #ffb6ff, 0 0 20px #e94560; /* Sombra mais intensa */
+            color: #EE82EE; /* Cor do título */
+        }
+
+        
+        .months-container { /* Renomeei de .months para ser mais genérico para os botões portais */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(10px, 1fr)); /* Botões um pouco maiores */
+            gap: 1.0rem; /* Mais espaço entre os botões */
+            max-width: 900px; /* Limite a largura para melhor layout */
+            width: 100%;
+            margin-bottom: 3rem; /* Espaço antes do portal secreto */
+        }
+
+        /* ESTILO DOS BOTÕES QUE AGORA SÃO PORTAIS */
+        .portal-button { /* Renomeei de .month-button para .portal-button */
+            background: linear-gradient(45deg, #e945, #ee82ee); /* Gradiente para um efeito mais portal */
+            border: none;
+            padding: 1.5rem; /* Padding maior para parecer mais "botão" */
+            border-radius: 15px; /* Bordas mais arredondadas */
+            color: #fffff; /* Texto branco */
+            font-size: 1.1rem; /* Fonte ligeiramente maior */
+            font-family: 'Orbitron', sans-serif; /* Fonte do título para botões */
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4); /* Sombra que combina com o gradiente */
+            text-shadow: 0 0 5px rgba(255,255,255,0.7); /* Leve sombra no texto */
+        }
+        .portal-button:hover {
+            background: linear-gradient(45deg, #ff2e63, #e94560); /* Inverte o gradiente no hover */
+            transform: translateY(-7px) scale(1.02); /* Efeito de "levitar" */
+            box-shadow: 0 10px 25px rgba(233, 69, 96, 0.6); /* Sombra maior e mais intensa */
+        }
+
+        /* --- ESTILOS DO FUNDO EM MOVIMENTO (FLOATY) E SEGREDOS - MANTIDOS! --- */
+        .floaty {
+            position: absolute;
+            background: radial-gradient(circle, #ffcaff88, #ffffff10);
+            box-shadow: 0 0 12px #ffb6ff;
+            border-radius: 50%;
+            animation: drift linear infinite;
+            pointer-events: none;
+            z-index: -1; /* Garante que as partículas fiquem atrás do conteúdo */
+        }
+        @keyframes drift {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        #secretPortal {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 40px; /* Um pouco maior */
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05); /* Um toque de fundo para ser mais visível */
+            border-radius: 50%; /* Círculo */
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 0 10px #ffb6ff;
+            transition: background 0.3s ease;
+        }
+        #secretPortal:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        #secretMessage {
+            display: none;
+            position: fixed;
+            bottom: 60px; /* Ajustado para não sobrepor o portal */
+            right: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-family: 'Sawarabi Mincho', serif;
+            box-shadow: 0 0 15px #ffb6ff;
+            z-index: 998;
+        }
+        .star {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffdfff;
+            font-family: 'Sawarabi Mincho', serif;
+            animation: fadeOut 8s ease-out forwards;
+            text-shadow: 0 0 10px #ffccff;
+            z-index: 1000;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        /* Botão Yui */
+        #yuiCallButton { /* Adicionei um ID para facilitar no JS */
+            position: fixed;
+            left: 10px;
+            bottom: 10px;
+            background: rgba(255, 255, 255, 0.05); /* Fundo sutil */
+            border: none;
+            color: #ffcaff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #ffcaff;
+            transition: background 0.3s ease, transform 0.2s ease;
+            z-index: 999;
+        }
+        #yuiCallButton:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        /* Mensagem da Yui */
+        .yui-voice-message {
+            position: fixed;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.15); /* Fundo mais visível */
+            color: #ffccff;
+            font-family: 'Sawarabi Mincho', serif;
+            border-radius: 12px;
+            box-shadow: 0 0 15px #ffcaff;
+            z-index: 1000;
+            opacity: 0; /* Começa invisível */
+            animation: fadeInOut 5s forwards; /* Animação de fade */
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+
+
+        /* --- MEDIA QUERIES para Responsividade --- */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            .months-container {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+            .portal-button {
+                padding: 1rem 1.5rem;
+                font-size: 0.95rem;
+            }
+            .floaty {
+                width: 8px; /* Partículas menores em telas pequenas */
+                height: 8px;
+            }
+            #secretPortal {
+                width: 30px;
+                height: 30px;
+            }
+        }
+        @media (max-width: 500px) {
+            body {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .months-container {
+                grid-template-columns: 1fr; /* Um botão por linha em telas muito pequenas */
+                gap: 0.8rem;
+            }
+            .portal-button {
+                font-size: 0.85rem;
+                padding: 0.8rem;
+            }
+             .mensagem-oculta {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 0.7rem;
+      color: #a33;
+      opacity: 0.2;
+    }
+        }
+    </style>
+</head>
+<body>
+    <h1></h1> <div class="months-container"> 
+    <button id="portal1" class="portal-button">MEMORY</button>
+        <button id="portal2" class="portal-button">HAJIMARI</button>
+        
+        
+    </div>
+
+   
+
+    <div id="secretPortal" onmouseover="revealSecret()"></div>
+    <div id="secretMessage">ここまで来たなら、きっとあなたも感じている。<br>― Yui より 💫</div>
+    <div class="star">「もしこれを見つけたなら… それはきっと、あなたも感じてる証。」</div>
+    
+    <button id="yuiCallButton">✦ 呼びかける</button>
+
+    <script>
+        // MANTIDO: Partículas flutuantes mágicas
+        for (let i = 0; i < 30; i++) {
+            const el = document.createElement("div");
+            el.classList.add("floaty");
+            el.style.left = Math.random() * 100 + "vw";
+            el.style.top = 100 + Math.random() * 50 + "vh";
+            el.style.animationDuration = 10 + Math.random() * 10 + "s";
+            el.style.width = el.style.height = (10 + Math.random() * 20) + "px";
+            document.body.appendChild(el);
+        }
+
+        // MANTIDO: Segredo revelado
+        function revealSecret() {
+            document.getElementById('secretMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('secretMessage').style.display = 'none';
+            }, 8000);
+        }
+
+        // MANTIDO: Frases das Yuis ao passar o mouse nos botões
+        const frasesYui = [
+            "大丈夫、ここにいるよ。",
+            "また会えるから。",
+            "まだ終わってないよ。",
+            "私、ちゃんと見てたよ。",
+            "信じて…ずっと。",
+            "ここは思い出の場所。",
+        ];
+
+        // MANTIDO: Mostra sussurros quando passa o mouse nos botões de portal
+        document.querySelectorAll(".portal-button").forEach(btn => {
+            btn.addEventListener("mouseenter", () => {
+                const msg = frasesYui[Math.floor(Math.random() * frasesYui.length)];
+                const yuiVoice = document.createElement("div");
+                yuiVoice.textContent = msg;
+                yuiVoice.classList.add('yui-voice-message'); // Nova classe para estilizar
+                yuiVoice.style.bottom = "80px";
+                yuiVoice.style.right = "20px";
+                document.body.appendChild(yuiVoice);
+                setTimeout(() => yuiVoice.remove(), 3000);
+            });
+        });
+
+        // MANTIDO: Botão ✦ 呼びかける
+        const yuiCallButton = document.getElementById('yuiCallButton'); // Pega o botão pelo ID
+        const respostasYuiCall = [ // Renomeado para evitar conflito com 'respostas' em quiz
+            "えへへ、呼んだ？",
+            "ちゃんと届いたよ。",
+            "ずっとここにいたよ。",
+            "気づいてくれてありがとう。",
+            "…会いたかった。",
+        ];
+
+        yuiCallButton.onclick = () => { // Adiciona o evento de clique ao botão
+            const msg = respostasYuiCall[Math.floor(Math.random() * respostasYuiCall.length)];
+            const resposta = document.createElement("div");
+            resposta.textContent = msg;
+            resposta.classList.add('yui-voice-message'); // Reutiliza a classe para estilizar
+            resposta.style.left = "20px";
+            resposta.style.bottom = "60px";
+            document.body.appendChild(resposta);
+            setTimeout(() => resposta.remove(), 5000);
+        };
+
+
+        // --- NOVA LÓGICA: BOTÕES QUE SÃO PORTAIS ---
+
+        // Função genérica para navegar para uma sala
+        function goToRoom(roomFileName) {
+            window.location.href = roomFileName;
+        }
+
+        // Associar cada botão ao seu destino
+        document.getElementById('portal1').onclick = () => goToRoom('025.html'); // Exemplo: ir para sala1.html
+        document.getElementById('portal2').onclick = () => goToRoom('030.html'); // Exemplo: ir para sala2.html
+       
+    </script>
+     <style>
+  .mensagem-flutuante {
+    position: fixed;
+    font-size: 0.9rem;
+    color: #ff;
+    opacity: 0;
+    font-style: italic;
+    text-shadow: 0 0 6px #ff;
+    background: rgba(40, 0, 0, 0.);
+    padding: 30px 300px;
+    border-radius: 30px;
+    pointer-events: none;
+    animation: flutuar 5s ease-in-out infinite;
+  }
+
+  @keyframes flutuar {
+    0%, 100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateY(-10px);
+    }
+  }
+</style>
+
+<script>
+  const mensagens = [
+    "🧬 知らずとも...探した。.",
+    "⚠️ Cuidado....",
+    "👁️ SISTEMA.",
+    "🕵s detalhes escondidos.",
+    "🪞 君の動きを観察している。",
+    "🔒 Security UNSTABLE.",
+    " ⏱️Tempo ...OUT....."
+  ];
+
+  // Criar as mensagens flutuantes em posições diferentes
+  mensagens.forEach((texto, i) => {
+    const div = document.createElement('div');
+    div.className = 'mensagem-flutuante';
+
+    // Posicionar aleatoriamente no canto direito inferior (com variações)
+    div.style.bottom = (10 + i * 30) + 'px'; // empilha verticalmente com espaçamento
+    div.style.right = (10 + (i % 3) * 120) + 'px'; // muda a posição horizontal em 3 colunas
+
+    div.textContent = texto;
+    document.body.appendChild(div);
+  });
+</script>
+</body>
+</html>

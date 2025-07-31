@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquivo: Presente</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .pergaminho {
+      background-color: rgba(0, 0, 0, 0.6);
+      border: 2px dashed #00ffcc;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      display: none;
+      text-align: left;
+      font-size: 1rem;
+      line-height: 1.6;
+      box-shadow: 0 0 20px #00ffcc44;
+    }
+
+    .botao {
+      padding: 1rem 2rem;
+      margin-top: 2rem;
+      background-color: transparent;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 1.3rem;
+      transition: background 0.3s;
+    }
+
+    .botao:hover {
+      background-color: #00ffcc;
+      color: #000;
+    }
+
+    .digitando span {
+      display: inline-block;
+      opacity: 0;
+      animation: aparecer 0.05s forwards;
+    }
+
+    @keyframes aparecer {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="botao" onclick="mostrarPergaminho()">👁 🗂️ ⚠️  </button>
+
+  <div class="pergaminho" id="pergaminho">
+    <div class="digitando" id="textoDigitando"></div>
+  </div>
+
+  <script>
+    const texto = `"Sistema ativo... memória presente acessada"
+Iniciando leitura...
+⚙️ if (esperança) {
+    continue;
+} else {
+    console.log("reiniciar...");
+}
+
+Erro... erro... bug... loop detectado...
+"Você ainda está aqui?"
+"Por quê?"
+
+🌀 Tentativa de manter o sistema em funcionamento...
+⌛ Falha detectada.
+⌘ Reinício automático em 3... 2... 1...`;
+
+    function mostrarPergaminho() {
+      const pergaminho = document.getElementById('pergaminho');
+      const textoEl = document.getElementById('textoDigitando');
+      pergaminho.style.display = 'block';
+      textoEl.innerHTML = ''; // limpar antes
+
+      let i = 0;
+      const intervalo = setInterval(() => {
+        if (i < texto.length) {
+          const span = document.createElement('span');
+          span.textContent = texto[i];
+          span.style.animationDelay = `${i * 0.03}s`;
+          textoEl.appendChild(span);
+          i++;
+        } else {
+          clearInterval(intervalo);
+        }
+      }, 30);
+
+      // ⏳ Redirecionar após 10 segundos
+      setTimeout(() => {
+        window.location.href = "013.html";
+      }, 21000);
+    }
+  </script>
+
+</body>
+</html>

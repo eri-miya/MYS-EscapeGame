@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>櫻の記憶 — Sakura no Kioku</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #f5fffa 0%, #ffe4e1 30%, #e6e6fa 70%, #e0ffff 100%);
+      color: #4a4a4a;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Camadas de profundidade */
+    .background-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Montanhas distantes */
+    .mountains {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(to top, rgba(200, 180, 220, 0.3), transparent);
+      clip-path: polygon(0 100%, 15% 60%, 25% 70%, 40% 50%, 60% 65%, 75% 45%, 90% 55%, 100% 40%, 100% 100%);
+    }
+
+    /* Árvore principal de sakura */
+    .sakura-tree {
+      position: absolute;
+      bottom: 0;
+      right: 10%;
+      width: 200px;
+      height: 400px;
+      z-index: 2;
+    }
+
+    /* Flores de sakura na árvore */
+    .tree-flower {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle, #ffb3d1 0%, #ff9fc7 50%, #ff8abd 100%);
+      border-radius: 50% 0 50% 0;
+      transform: rotate(45deg);
+      animation: treeFlowerSway 4s infinite ease-in-out;
+    }
+
+    .tree-flower::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #ffcce0 0%, #ffb3d1 100%);
+      border-radius: 50% 0 50% 0;
+      transform: rotate(90deg);
+    }
+
+    @keyframes treeFlowerSway {
+      0%, 100% { transform: rotate(45deg) scale(1); }
+      50% { transform: rotate(50deg) scale(1.05); }
+    }
+
+    /* Posicionamento das flores na árvore */
+    .flower1 { top: 60px; left: 150px; animation-delay: 0s; }
+    .flower2 { top: 80px; left: 170px; animation-delay: 0.5s; }
+    .flower3 { top: 100px; left: 160px; animation-delay: 1s; }
+    .flower4 { top: 45px; left: 140px; animation-delay: 1.5s; }
+    .flower5 { top: 120px; left: 180px; animation-delay: 2s; }
+    .flower6 { top: 70px; left: 130px; animation-delay: 2.5s; }
+    .flower7 { top: 90px; left: 185px; animation-delay: 3s; }
+    .flower8 { top: 110px; left: 145px; animation-delay: 3.5s; }
+
+    /* Pétalas caindo */
+    .petal {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(45deg, #ffb3d1, #ff9fc7, #ffcce0);
+      border-radius: 50% 0 50% 0;
+      transform: rotate(45deg);
+      opacity: 0.8;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100vh) rotate(45deg) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(50vh) rotate(180deg) scale(0.8);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(100vh) rotate(315deg) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    /* Efeito de vento */
+    @keyframes windSway {
+      0%, 100% { transform: translateX(0px); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .sakura-tree {
+      animation: windSway 6s infinite ease-in-out;
+    }
+
+    /* Conteúdo centralizado */
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .content h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 20px;
+      color: #8B4A6B;
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+    }
+
+    .content p {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      line-height: 1.6;
+      color: #5D4E75;
+      margin: 15px 0;
+      font-style: italic;
+    }
+
+    /* Timer visual */
+    .timer {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 10px 15px;
+      border-radius: 10px;
+      color: #8B4A6B;
+      font-size: 14px;
+      z-index: 15;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .sakura-tree {
+        right: 5%;
+        width: 150px;
+        height: 300px;
+      }
+      
+      .content {
+        width: 90%;
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sakura-tree {
+        width: 120px;
+        height: 250px;
+      }
+    }
+     
+    /* Folhas ao fundo */
+    .leaf {
+      position: absolute;
+      width: 15px;
+      height: 8px;
+      background: linear-gradient(45deg, #98FB98, #90EE90);
+      border-radius: 0 100% 0 100%;
+      opacity: 0.3;
+      animation: leafFloat 8s infinite ease-in-out;
+    }
+
+    @keyframes leafFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+  </style>
+</head>
+<body>
+  <!-- Camada de fundo com montanhas -->
+  <div class="background-layer">
+    <div class="mountains"></div>
+  </div>
+
+  <!-- Árvore de Sakura -->
+  <div class="sakura-tree">
+    <div class="trunk"></div>
+    <div class="branch branch1"></div>
+    <div class="branch branch2"></div>
+    <div class="branch branch3"></div>
+    <div class="branch branch4"></div>
+    
+    <!-- Flores na árvore -->
+    <div class="tree-flower flower1"></div>
+    <div class="tree-flower flower2"></div>
+    <div class="tree-flower flower3"></div>
+    <div class="tree-flower flower4"></div>
+    <div class="tree-flower flower5"></div>
+    <div class="tree-flower flower6"></div>
+    <div class="tree-flower flower7"></div>
+    <div class="tree-flower flower8"></div>
+  </div>
+
+  <!-- Conteúdo central -->
+  <div class="content">
+    <h1>🌸 ESCOLHA 道</h1>
+    <p>"花びらが風に舞う..."</p>
+    <p>"Each falling blossom carries a memory"</p>
+    <p>""Agora você não quis me encontrar… *Now you didn't want to find me…
+「でも、未来には別の機会がある」 but in the future… you'll have another chance.....</p>
+  </div>
+
+ 
+
+  <script>
+    // Função para criar pétalas caindo
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      
+      // Posição aleatória no topo da tela
+      petal.style.left = Math.random() * 100 + 'vw';
+      
+      // Duração aleatória da animação (8-15 segundos)
+      const duration = Math.random() * 7 + 8;
+      petal.style.animationDuration = duration + 's';
+      
+      // Delay aleatório
+      const delay = Math.random() * 3;
+      petal.style.animationDelay = delay + 's';
+      
+      // Movimento horizontal aleatório (efeito vento)
+      const drift = (Math.random() - 0.5) * 200;
+      petal.style.setProperty('--drift', drift + 'px');
+      
+      // Tamanho aleatório
+      const size = Math.random() * 4 + 6;
+      petal.style.width = size + 'px';
+      petal.style.height = size + 'px';
+      
+      // Cor aleatória de rosa
+      const colors = [
+        'linear-gradient(45deg, #ffb3d1, #ff9fc7, #ffcce0)',
+        'linear-gradient(45deg, #ffc0cb, #ffb6c1, #ffe4e8)',
+        'linear-gradient(45deg, #ff69b4, #ff1493, #ffc0cb)'
+      ];
+      petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+      
+      document.body.appendChild(petal);
+      
+      // Remove a pétala após a animação
+      setTimeout(() => {
+        if (petal.parentNode) {
+          petal.parentNode.removeChild(petal);
+        }
+      }, (duration + delay) * 1000);
+    }
+
+    // Criar pétalas continuamente
+    setInterval(createPetal, 300);
+
+    // Criar algumas folhas de fundo
+    function createLeaf() {
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      leaf.style.left = Math.random() * 100 + 'vw';
+      leaf.style.top = Math.random() * 100 + 'vh';
+      leaf.style.animationDelay = Math.random() * 8 + 's';
+      document.body.appendChild(leaf);
+    }
+
+    // Criar 5 folhas de fundo
+    for (let i = 0; i < 5; i++) {
+      createLeaf();
+    }
+
+    // Efeito de vento nas pétalas
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fall {
+        0% {
+          transform: translateY(-100vh) translateX(0) rotate(45deg) scale(1);
+          opacity: 1;
+        }
+        25% {
+          transform: translateY(-25vh) translateX(var(--drift, 0px)) rotate(135deg) scale(0.9);
+          opacity: 0.8;
+        }
+        50% {
+          transform: translateY(50vh) translateX(calc(var(--drift, 0px) * 0.5)) rotate(225deg) scale(0.7);
+          opacity: 0.6;
+        }
+        75% {
+          transform: translateY(75vh) translateX(calc(var(--drift, 0px) * -0.3)) rotate(315deg) scale(0.6);
+          opacity: 0.4;
+        }
+        100% {
+          transform: translateY(100vh) translateX(calc(var(--drift, 0px) * -0.8)) rotate(405deg) scale(0.3);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Redimensionar canvas quando a tela mudar de orientação
+    window.addEventListener('orientationchange', () => {
+      setTimeout(resizeCanvas, 100);
+    });
+
+    // REDIRECIONAMENTO EM 30 SEGUNDOS - AGORA NO ESCOPO CORRETO
+    let countdown = 20;
+    const timerElement = document.getElementById('timer');
+    
+    // Atualizar o timer a cada segundo
+    const timerInterval = setInterval(() => {
+      countdown--;
+      if (timerElement) {
+        timerElement.textContent = `Redirecionando em: ${countdown}s`;
+      }
+      
+      if (countdown <= 0) {
+        clearInterval(timerInterval);
+      }
+    }, 1000);
+
+    // Redirecionar após 30 segundos
+    setTimeout(() => {
+      window.location.href = "028.html";
+    }, 10000); // 30 segundos = 30000 milissegundos
+  </script>
+</body>
+</html>

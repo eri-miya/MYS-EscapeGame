@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>🧬 選択の研究室 — Sala 6</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #330000 10%, #000000 90%);
+      color: #ff5555;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      animation: piscar 8s infinite;
+    }
+
+    @keyframes piscar {
+      0%, 100% { background-color: #000000; }
+      50% { background-color: #220000; }
+    }
+
+    .interface {
+      position: relative;
+      z-index: 10;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      color: #ff8888;
+    }
+
+    .choices button {
+      background: #220000;
+      border: 1px solid #ff555588;
+      color: #ff8888;
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+      animation: pulse 1.5s infinite;
+    }
+
+    .choices button:hover {
+      background: #ff000022;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,85,85, 0.4); }
+      70% { box-shadow: 0 0 10px 10px rgba(255,85,85, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,85,85, 0); }
+    }
+
+    .floating-msg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.1rem;
+      color: #ffaaaa;
+      opacity: 0;
+      animation: floatFade 3s forwards;
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+    }
+
+    @keyframes floatFade {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -60%) scale(1.1); }
+    }
+
+    .kiken {
+      position: absolute;
+      top: 10vh;
+      left: 20vw;
+      font-size: 4rem;
+      color: rgba(255, 0, 0, 0.05);
+      animation: fade 12s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes fade {
+      0%, 100% { opacity: 0.02; }
+      50% { opacity: 0.1; }
+    }
+
+    .mensagem-oculta {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 0.7rem;
+      color: #a33;
+      opacity: 0.2;
+    }
+  </style>
+</head>
+<body>
+  <div class="interface">
+    <h1>⚠️ セキュリティ違反 — Faça sua escolha</h1>
+    <div class="choices" id="choiceArea">
+      <button onclick="escolher('Amostra instável... será que ainda está viva?', '008.html')">🧪 🧬</button>
+      <button onclick="escolher('Terminal violado. Registrando invasor...', '015.html')">🔬  🌐      </button>
+      <button onclick="escolher('DNA alterado com sucesso... você ainda é você?', '016.html')">💉 🐍 💉  </button>
+    </div>
+  </div>
+
+  <div class="kiken">⚠️ 危険 ⚠️</div>
+  <div class="mensagem-oculta">"Yui deixou algo escondido aqui. Mas só quem sente pode ver."</div>
+
+  <audio id="sfx" src="https://cdn.pixabay.com/audio/2021/08/04/audio_e6ff4b6b74.mp3"></audio>
+
+  <script>
+    function escolher(mensagem, destino) {
+      // Som
+      const sfx = document.getElementById('sfx');
+      sfx.play();
+
+      // Mensagem flutuante
+      const msg = document.createElement('div');
+      msg.className = 'floating-msg';
+      msg.textContent = mensagem;
+      document.body.appendChild(msg);
+
+      // Vai pra outra sala
+      setTimeout(() => {
+        window.location.href = destino;
+      }, 4000);
+    }
+    
+  </script>
+  <style>
+  .mensagem-flutuante {
+    position: fixed;
+    font-size: 0.9rem;
+    color: #ff9999;
+    opacity: 0;
+    font-style: italic;
+    text-shadow: 0 0 6px #ff6666bb;
+    background: rgba(40, 0, 0, 0.4);
+    padding: 6px 10px;
+    border-radius: 10px;
+    pointer-events: none;
+    animation: flutuar 5s ease-in-out infinite;
+  }
+
+  @keyframes flutuar {
+    0%, 100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateY(-10px);
+    }
+  }
+</style>
+
+<script>
+  const mensagens = [
+    "🧬  You've activated something... even without knowing.",
+    "⚠️ Cuidado, o sistema está instável.",
+    "👁️ 物音がしたら、聞かなかったふりをしてください。.",
+    "🕵️‍♀️The secret lies in the hidden details.",
+    "💻 A Yui está observando seus movimentos.",
+    "🔒 セキュリティ層6が有効化されました。",
+    "🌌 Time is relative, choose wisely"
+  ];
+
+  // Criar as mensagens flutuantes em posições diferentes
+  mensagens.forEach((texto, i) => {
+    const div = document.createElement('div');
+    div.className = 'mensagem-flutuante';
+
+    // Posicionar aleatoriamente no canto direito inferior (com variações)
+    div.style.bottom = (10 + i * 30) + 'px'; // empilha verticalmente com espaçamento
+    div.style.right = (10 + (i % 3) * 120) + 'px'; // muda a posição horizontal em 3 colunas
+
+    div.textContent = texto;
+    document.body.appendChild(div);
+  });
+</script>
+
+</body>
+</html>

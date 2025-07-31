@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sala do Escritório - Escape</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-color: #1c1c1c;
+      color: #00ffcc;
+      overflow-x: hidden;
+    }
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+        to bottom,
+        #a9a9a9 0px,
+        #2e2e2e 1px,
+        #1c1c1c 1px,
+        #1c1c1c 2px
+      );
+      z-index: -1;
+      animation: scrollBg 20s linear infinite;
+    }
+    @keyframes scrollBg {
+      0% { background-position-y: 0; }
+      100% { background-position-y: 100%; }
+    }
+    .container {
+      padding: 2rem;
+      text-align: center;
+    }
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: .15em solid #00ffcc;
+      width: 0;
+      animation: typing 4s steps(60, end) forwards;
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    .main-box {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .object-box {
+      border: 2px dashed #00ffcc;
+      border-radius: 10px;
+      padding: 2rem;
+      width: 180px; /* Aumentado para caber o input */
+      height: 150px; /* Aumentado para caber o input */
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .emoji {
+      font-size: 3rem;
+      animation: pulse 1.5s infinite;
+      cursor: pointer;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .floating-hint {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #00ffcc;
+      padding: 0.2rem 0.5rem;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap; /* Garante que a dica não quebre linha */
+    }
+    .object-box:hover .floating-hint {
+      opacity: 1;
+    }
+    .floating-emoji {
+      position: absolute;
+      animation: float 8s infinite ease-in-out;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-30px); }
+      100% { transform: translateY(0); }
+    }
+    #pergaminho {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #222;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 1rem;
+      width: 80vw;
+      max-width: 400px;
+      z-index: 100;
+      box-shadow: 0 0 10px #0f0;
+      border-radius: 10px;
+      text-align: left;
+    }
+    #inventory {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #00ffaa;
+    }
+    button.close-btn, button.submit-btn {
+      margin-top: 1rem;
+      background-color: #0f0;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+      color: #000;
+    }
+    input[type="text"] {
+      background-color: #000;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+      padding: 0.5rem;
+      margin-top: 1rem;
+      width: 80%;
+      text-align: center;
+    }
+    .password-input-area {
+      display: none; /* Escondido por padrão */
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix-bg"></div>
+  <div class="container">
+    <h1>OFFICE</h1>
+    <p class="typewriter">"ESCOLHA: 🧠⚖️.... 🗝 🔓 ou 🧾 para 🗂   🖥 ..."</p>
+
+    <div class="main-box">
+      <div class="object-box" id="pc-box">
+        <div class="emoji" onclick="clicarPC()">🖥</div>
+        <div class="floating-hint">Senha escondida no ambiente...</div>
+        <div class="password-input-area" id="pc-password-area">
+          <input type="text" id="pc-password-input" placeholder="Digite a senha do PC" />
+          <button class="submit-btn" onclick="verificarSenhaPC()">Verificar Senha</button>
+        </div>
+      </div>
+      <div class="object-box" id="cofre-box">
+        <div class="emoji" onclick="clicarCofre()">️🔒</div>
+        <div class="floating-hint">Onde está a chave?</div>
+        <div class="password-input-area" id="cofre-password-area">
+          <input type="text" id="cofre-password-input" placeholder="Digite a senha do Cofre" />
+          <button class="submit-btn" onclick="verificarSenhaCofre()">Verificar Senha</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="message" style="margin-top:2rem;"></div>
+    <div id="inventory"></div>
+  </div>
+
+  <div class="floating-emoji" style="top: 20%; left:- 40%;" onclick="mostrarDica('🔐 ')">🗝️</div>
+  <div class="floating-emoji" style="top: 10%; left: 70%;" onclick="mostrarDica('🔑 ')">🗝️</div>
+  <div class="floating-emoji" style="top: 70%; left: 10%;" onclick="ganharTesouro()">🗝️️</div>
+
+  <div class="floating-emoji" style="top: 55%; left: 90%;" onclick="mostrarDica(' 🗺️️')">🧾</div>
+  <div class="floating-emoji" style="top: 80%; left: 60%;" onclick="mostrarDica('🖥️')">🧾</div>
+  <div class="floating-emoji" style="top: 80%; left: 25%;" onclick="mostrarDica('🖥️⌨️  ️')">🧾</div>
+
+  <div id="pergaminho">
+    <p><strong>Arquivo Secreto:</strong></p>
+    <p>pR3sEnt3 : 01X4Z<br>p4ss4d0 : 9LQ*7<br>Futur0? : ....。</p>
+    <button class="close-btn" onclick="fecharPergaminho()">Fechar</button>
+  </div>
+
+  <script>
+    let escolhaFeita = false;
+    let pcAttempts = 0;
+    let cofreAttempts = 0;
+    const PC_PASSWORD = "PC"; // Senha do PC
+    const COFRE_PASSWORD = "KEY"; // Senha do Cofre
+
+    function mostrarDica(msg) {
+      document.getElementById("message").innerHTML = msg;
+    }
+
+    function clicarCofre() {
+      if (!escolhaFeita) {
+        document.getElementById("message").innerHTML = "Você decidiu procurar a chave para abrir o cofre. Digite a senha:";
+        document.getElementById("cofre-password-area").style.display = "flex";
+        document.getElementById("pc-password-area").style.display = "none"; // Esconde a área do PC
+        escolhaFeita = true;
+      } else if (document.getElementById("cofre-password-area").style.display === "none") {
+        document.getElementById("message").innerHTML = "Você já fez sua escolha. Tente a senha do cofre.";
+        document.getElementById("cofre-password-area").style.display = "flex";
+        document.getElementById("pc-password-area").style.display = "none"; // Garante que a área do PC esteja escondida
+      } else {
+        document.getElementById("message").innerHTML = "Você já fez sua escolha. Continue tentando a senha do cofre.";
+      }
+    }
+
+    function clicarPC() {
+      if (!escolhaFeita) {
+        document.getElementById("message").innerHTML = "Você decidiu tentar acessar o PC. Digite a senha:";
+        document.getElementById("pc-password-area").style.display = "flex";
+        document.getElementById("cofre-password-area").style.display = "none"; // Esconde a área do cofre
+        escolhaFeita = true;
+      } else if (document.getElementById("pc-password-area").style.display === "none") {
+        document.getElementById("message").innerHTML = "Você já fez sua escolha. Tente a senha do PC.";
+        document.getElementById("pc-password-area").style.display = "flex";
+        document.getElementById("cofre-password-area").style.display = "none"; // Garante que a área do cofre esteja escondida
+      } else {
+        document.getElementById("message").innerHTML = "Você já fez sua escolha. Continue tentando a senha do PC.";
+      }
+    }
+
+    function verificarSenhaPC() {
+  const inputPassword = document.getElementById("pc-password-input").value;
+  pcAttempts++;
+
+  if (inputPassword === PC_PASSWORD) {
+    document.getElementById("message").innerHTML = "✨ Senha do PC correta! Você desbloqueou o pergaminho! ✨";
+    abrirPergaminho();
+    setTimeout(() => {
+      window.location.href = "011.html";
+    }, 3000); // Redireciona após 3 segundos
+  } else {
+    if (pcAttempts < 2) {
+      document.getElementById("message").innerHTML = `Senha incorreta. Você tem mais ${2 - pcAttempts} chance(s).`;
+    } else {
+      document.getElementById("message").innerHTML = "Senha incorreta. Você esgotou suas chances para o PC.";
+      setTimeout(() => {
+        window.location.href = "002.html";
+      }, 2000); // Redireciona após 3 segundos
+    }
+  }
+  document.getElementById("pc-password-input").value = "";
+}
+
+function verificarSenhaCofre() {
+  const inputPassword = document.getElementById("cofre-password-input").value;
+  cofreAttempts++;
+
+  if (inputPassword === COFRE_PASSWORD) {
+    document.getElementById("message").innerHTML = "✨ Senha do Cofre correta! Você abriu  ✨";
+    ganharTesouro();
+    setTimeout(() => {
+      window.location.href = "010.html";
+    }, 1000); // Redireciona após 3 segundos
+  } else {
+    if (cofreAttempts < 2) {
+      document.getElementById("message").innerHTML = `Senha incorreta. Você tem mais ${2 - cofreAttempts} chance(s).`;
+    } else {
+      document.getElementById("message").innerHTML = "Senha incorreta. Você esgotou suas chances para o Cofre.";
+      setTimeout(() => {
+        window.location.href = "002.html";
+      }, 2000); // Redireciona após 3 segundos
+    }
+  }
+  document.getElementById("cofre-password-input").value = "";
+}
+
+
+    function ganharTesouro() {
+      // Esta função agora é chamada APENAS quando a senha do cofre está correta
+      document.getElementById("message").innerHTML = "<br>🔓 ";
+      document.getElementById("inventory").innerText = " 💎";
+    }
+
+    function abrirPergaminho() {
+      document.getElementById("pergaminho").style.display = "block";
+    }
+
+    function fecharPergaminho() {
+      document.getElementById("pergaminho").style.display = "none";
+      document.getElementById("message").innerHTML = "🌀 Um dia você entenderá... A porta secreta se abre silenciosamente...";
+      document.getElementById("inventory").innerText = "Inventário: Pergaminho 📜";
+    }
+  </script>
+</body>
+</html>

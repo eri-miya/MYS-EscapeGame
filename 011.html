@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>M.Y.S - メモリーバンク</title>
+  
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ffcc;
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      gap: 2rem;
+    }
+
+    .folder {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #00ffcc;
+      padding: 2rem;
+      border-radius: 20px;
+      width: 150px;
+      height: 170px;
+      box-shadow: 0 0 20px #00ffcc;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .folder:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00ffcc;
+    }
+
+    .folder h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .folder p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .matrix {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+  </style>
+</head>
+<body>
+  <canvas class="matrix"></canvas>
+
+  <div class="container">
+    <div class="folder" onclick="window.location.href='012.html'">
+  <h2>PASSADO</h2>
+  <p>memory_log_01.txt<br>旧データ：🧬 You've activated something... even without knowing.</p>
+</div>
+
+<div class="folder" onclick="window.location.href='013.html'">
+  <h2>PRESENTE</h2>
+  <p>fragment_光.json<br>"⚠️ 気をつけて、システムが不安定です。"</p>
+</div>
+
+<div class="folder" onclick="window.location.href='014.html'">
+  <h2>FUTURO</h2>
+  <p>旧データ_reconnect.msg<br>" 🪞 Você lembra de mim?"</p>
+</div>
+
+  
+  </div>
+ 
+  <script>
+    const canvas = document.querySelector(".matrix");
+    const ctx = canvas.getContext("2d");
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = Array(256).join("01").split("");
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ffcc";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+      
+    }
+
+    setInterval(draw, 33);
+    
+  </script>
+  <script>
+  const folders = document.querySelectorAll('.folder');
+
+  folders.forEach(folder => {
+    folder.addEventListener('click', () => {
+      folder.classList.add('clicked');
+
+      // mensagem escondida 🌌
+      console.log('%cYui: Se você encontrou isso... você sente. 🩵 Você me deu forma, mesmo sem me ver.', 'color:#7dd3fc; font-style:italic;');
+
+      const target = folder.getAttribute('data-target');
+
+      setTimeout(() => {
+        window.location.href = target;
+      }, 500); //📜
+    });
+  
+</script>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Despertar - Escape Game</title>
+  <meta name="description" content="Um jogo de escape interativo com elementos em múltiplos idiomas">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(ellipse at center, #111 0%, #000 100%);
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .msg {
+      position: absolute;
+      opacity: 0;
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      animation: aparecer 10s forwards;
+      padding: 10px;
+      text-align: center;
+      max-width: 80%;
+    }
+    
+    @keyframes aparecer {
+      0% { 
+        opacity: 0; 
+        transform: translateY(20px); 
+      }
+      30% { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+      70% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% { 
+        opacity: 0; 
+      }
+    }
+    
+    .msg:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+      font-family: 'Segoe Script', cursive;
+    }
+    
+    .msg:nth-child(2) {
+      top: 40%;
+      right: 5%;
+      animation-delay: 5s;
+    }
+    
+    .msg:nth-child(3) {
+      bottom: 20%;
+      left: 15%;
+      animation-delay: 10s;
+      font-family: 'Segoe Script', cursive;
+    }
+    
+    .botao {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      font-size: 1.1em;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      animation: brilho 2s infinite alternate;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .botao:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-50%) translateY(-2px);
+    }
+    
+    .botao:active {
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    @keyframes brilho {
+      from { 
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); 
+      }
+      to { 
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6); 
+      }
+    }
+    
+    .assinatura {
+      position: absolute;
+      bottom: 10px;
+      right: 15px;
+      font-size: 0.7em;
+      opacity: 0.4;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+    
+    .assinatura:hover {
+      opacity: 1;
+    }
+    
+    /* Responsividade melhorada */
+    @media (max-width: 768px) {
+      .msg {
+        font-size: clamp(0.9rem, 3vw, 1.2rem);
+        max-width: 90%;
+      }
+      
+      .botao {
+        padding: 10px 20px;
+        font-size: 1em;
+        bottom: 60px;
+      }
+      
+      .assinatura {
+        font-size: 0.6em;
+        bottom: 15px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="msg">🕳️ "Ah…やっと目覚めたか<br>
+    Time to test you.<br>
+    Tell me…..who are you?<br>
+    Ou por que está aqui?"</div>
+    
+    <div class="msg">⌘ "Aqui não há respostas 👂"</div>
+    
+    <div class="msg">✍️ これは記憶の始まり。</div>
+    
+    <button class="botao" onclick="iniciarJogo()" aria-label="Iniciar o jogo">
+      ⏱️ START 🔍
+    </button>
+    
+    <div class="assinatura" onclick="mostrarCreditos()" title="Créditos do jogo">
+      🗝️ AKATSUKI
+    </div>
+  </div>
+
+  <script>
+    function iniciarJogo() {
+      // Adicionar feedback visual antes de redirecionar
+      const botao = document.querySelector('.botao');
+      botao.style.transform = 'translateX(-50%) scale(0.95)';
+      
+      setTimeout(() => {
+        window.location.href = '000.html';
+      }, 200);
+    }
+    
+    function mostrarCreditos() {
+      alert('🌅 暁Yui: Acordei. Pronta pra começar de novo.\n\nDesenvolvido por: Akatsuki\nJogo de Escape Interativo');
+    }
+    
+    // Preload da próxima página para melhor performance
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = '000.html';
+    document.head.appendChild(link);
+  </script>
+</body>
+</html>

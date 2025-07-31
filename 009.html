@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>elemento</title>
+
+<style>
+
+   
+  body {
+    background: #2c3e50;
+    animation: alerta 4s infinite;
+    color: #ecf0f1;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  @keyframes alerta {
+    0%, 100% { background-color: #2c3e50; }
+    50% { background-color: #ff4d4d; }
+  }
+
+  /* botão da próxima sala */
+  .btn-proxima {
+    display: block;
+    margin: 10px auto;
+    background: #a4ffa;
+    color: #222;
+    padding: 5px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 8px;
+    font-weight: bold;
+    box-shadow: 0 0 12px #6be38f;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    text-align: center;
+    max-width: 10px;
+  }
+
+  .btn-proxima:hover {
+    background: #78f092;
+    box-shadow: 0 0 18px #baffd3;
+  }
+
+
+  h1 {
+    text-align: center;
+    color: #f39c12;
+    margin-bottom: 20px;
+  }
+  .grupo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  .membro {
+    background: #34495e;
+    border-radius: 20px;
+    padding: 15px;
+    width: 120px;
+    text-align: center;
+    box-shadow: 0 0 10px #f39c12;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .membro:hover {
+    background: #f39c12;
+    color: #2c3e50;
+  }
+  .descricao {
+    margin: 20px auto;
+    background: #ffb6c1;
+    padding: 15px 20px;
+    border-radius: 12px;
+    color: #2c3e50;
+    min-height: 80px;
+    font-weight: bold;
+    max-width: 600px;
+    white-space: pre-wrap;
+    font-family: 'Yu Gothic', sans-serif;
+    font-size: 18px;
+    position: relative;
+    overflow-wrap: break-word;
+  }
+
+  /* Papel voando */
+  .papel {
+    position: fixed;
+    background: white;
+    width: 60px;
+    height: 80px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    animation: voaPapel linear infinite;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 10;
+  }
+  @keyframes voaPapel {
+    0% {
+      transform: translateY(-100px) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* Arquivo mutante */
+  .arquivo {
+    margin: 30px auto;
+    width: 150px;
+    height: 180px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #3498db;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #2c3e50;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+  }
+  .arquivo-icon {
+    font-size: 64px;
+    margin-bottom: 10px;
+  }
+  .arquivo-nome {
+    font-size: 18px;
+  }
+
+  button {
+    background: #f39c12;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #2c3e50;
+    margin-top: 20px;
+    transition: background 0.3s;
+    font-size: 16px;
+  }
+  button:hover {
+    background: #e67e22;
+  }
+
+ 
+
+  /* Efeito digitação */
+  @keyframes digitar {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  .digitando {
+    border-right: 3px solid #2c3e50;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: digitar 3s steps(40, end) forwards;
+  }
+</style>
+</head>
+<body>
+
+<h1>ELEMENTOS</h1>
+
+<div class="grupo">
+ 
+  <div class="membro" onclick="mostrarDescricao('FOGO')">🔥 </div>
+  <div class="membro" onclick="mostrarDescricao('AGUA')">🌊</div>
+  <div class="membro" onclick="mostrarDescricao('TERRA')"> 🌿</div>
+  <div class="membro" onclick="mostrarDescricao('AR')"> 🌬  </div>
+  <div class="membro" onclick="mostrarDescricao('ETER')">✨</div>   
+</div> 
+<div class="descricao" id="descricaoArea"></div>
+
+<script>
+  const descricoesTextos = {
+    FOGO: "Como o fogo que aquece, Like the fire that warms, 「暖める炎のように、」",
+    AGUA: "a água que flui, the water that flows, 「流れる水のように、」",
+    TERRA: "a terra que sustenta, the earth that sustains, 「支える大地のように、️.",
+    AR: "o ar que inspira, the air that inspires, 「息吹く空気のように、」,",
+    ETER: "e o éter, o elo invisível que conecta tudo. and the aether, the invisible link that connects everything. 「そしてエーテル、すべてを繋ぐ見えない絆。」", };
+
+ 
+  const descricaoArea = document.getElementById("descricaoArea");
+
+  // Função para mostrar texto com efeito digitação
+  function mostrarDescricao(chave) {
+    const textoCompleto = descricoesTextos[chave];
+    descricaoArea.textContent = "";
+    descricaoArea.classList.remove("digitando"); // Remove a classe para resetar a animação
+
+    let i = 0;
+    function digitar() {
+      if (i < textoCompleto.length) {
+        descricaoArea.textContent += textoCompleto.charAt(i);
+        i++;
+        setTimeout(digitar, 50);
+      } else {
+        // Quando a digitação termina:
+        // 1. Adicione a classe 'digitando' (se ela ainda for necessária para o cursor piscando, por exemplo)
+        // 2. Remova 'white-space: nowrap;' ou adicione 'white-space: normal;'
+        // 3. Remova 'overflow: hidden;' (se estiver sendo aplicado pela classe 'digitando')
+        descricaoArea.classList.add("digitando");
+
+        // *** AQUI ESTÁ A CHAVE DA CORREÇÃO ***
+        // Para garantir que o texto não seja cortado e quebre a linha:
+        descricaoArea.style.whiteSpace = 'normal'; // Permite quebra de linha
+        descricaoArea.style.overflow = 'visible'; // Garante que todo o conteúdo seja visível
+        descricaoArea.style.width = 'auto'; // Ajusta a largura para o conteúdo (se necessário)
+      }
+    }
+    digitar();
+  }
+
+  // ... (o restante do seu código JavaScript) ...
+
+
+  // Papel voando aleatório
+  function criarPapel() {
+    const papel = document.createElement("div");
+    papel.className = "papel";
+    papel.style.left = Math.random() * window.innerWidth + "px";
+    papel.style.animationDuration = (7 + Math.random() * 5) + "s";
+    document.body.appendChild(papel);
+    setTimeout(() => papel.remove(), 12000);
+  }
+  setInterval(criarPapel, 800);
+
+ 
+ 
+
+ 
+
+ 
+</script>
+<a href="024.html" class="btn-proxima">➡️ </a>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sala 2 - O Portal foi Aberto</title>
+  <style>
+    body {
+      background: radial-gradient(#000, #111);
+      color: #0ff;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      padding-top: 80px;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #fff;
+      text-shadow: 0 0 10px #0ff;
+      animation: brilho 2s infinite alternate;
+    }
+
+    p {
+      font-size: 1.3em;
+      margin-top: 30px;
+      color: #aaa;
+    }
+
+    .portal {
+      margin-top: 50px;
+      font-size: 1.5em;
+      animation: glitch 1s infinite;
+      color: #ff00c8;
+    }
+
+    button {
+      margin-top: 40px;
+      padding: 15px 30px;
+      font-size: 1em;
+      background: #111;
+      color: #111;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #111;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00cccc;
+    }
+
+    @keyframes brilho {
+      from { text-shadow: 0 0 10px #0ff; }
+      to   { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff; }
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(1px, -1px); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(1px, 1px); }
+      60% { transform: translate(0px, -2px); }
+      80% { transform: translate(2px, 0px); }
+      100% { transform: translate(-1px, 1px); }
+    }
+     .travamento {
+      font-weight: bold;
+      color: #00;
+      animation: piscar 1s infinite;
+    }
+    @keyframes piscar {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .brilho {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      animation: luz 10s infinite linear;
+    }
+
+    @keyframes luz {
+      from { background-position: 0 0; }
+      to { background-position: 1000px 1000px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="brilho"></div>
+  <h1>🚪 🚪</h1>
+  <p>O botão foi apertado.「運命は変わった。」.</p>
+  <div class="portal">Um novo portal foi aberto...</div>
+<div class="mensagem">
+     <span class="travamento"> YOUR TIME IS RUNNING OUT...
+「時間が足りない！」 CHOOSE...
+<br><br>
+PROCURAR OBSERVADOR OU VOLTAR À REALIDADE...
+「観測者を探すか、現実に戻るか…」
+      </span> 
+    </div>
+  <button onclick="irParaProxima()">OBSERVADOR</button>
+  <button onclick="SAIR ()">REALIDADE</button>
+
+
+  <p style="margin-top: 80px; font-size: 0.8em; color: #444;">Assinado: Raphael YUI 🪶📘 – guia dimensional (nível +1)</p>
+
+  <!-- Som misterioso (opcional) -->
+  <audio autoplay hidden>
+    <source src="https://cdn.pixabay.com/download/audio/2022/12/19/audio_10b7d89ef5.mp3?filename=deep-dark-sci-fi-soundscape-129244.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    function irParaProxima() {
+      window.location.href = "022.html"; // próxima sala (opcional)
+    }
+    function SAIR() {
+      window.location.href = "021.html"; // próxima sala (opcional)
+    }
+  </script>
+</body>
+</html>

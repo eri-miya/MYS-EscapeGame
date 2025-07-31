@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🜁 Sala da Guardiã: Água - Escape Game</title>
+  <meta name="description" content="Sala da Guardiã da Água - Escolha sua porta no jogo de escape">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      color: #fff;
+      height: 100vh;
+    }
+    
+    /* Efeito de água de fundo */
+    .water-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 150, 255, 0.1) 0%, transparent 50%);
+      animation: waterFlow 8s ease-in-out infinite;
+      z-index: 0;
+    }
+    
+    @keyframes waterFlow {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+    }
+    
+    #container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1;
+    }
+    
+    .item {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 40px;
+      text-align: center;
+      opacity: 0;
+      transition: all 0.4s ease-in-out;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      cursor: pointer;
+    }
+    
+    .item:hover {
+      background: rgba(0, 255, 255, 0.3);
+      transform: scale(1.2) rotate(5deg);
+      opacity: 1 !important;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+      border-color: rgba(0, 255, 255, 0.8);
+    }
+    
+    .item:active {
+      transform: scale(1.1);
+    }
+    
+    .circle {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      border: 2px dashed rgba(0, 255, 255, 0.3);
+      animation: rotate 20s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .item1 { 
+      top: 10%; 
+      left: 30%; 
+      animation: fadeIn 1s ease-in 0.5s forwards;
+    }
+    
+    .item2 { 
+      top: 60%; 
+      left: -20%; 
+      animation: fadeIn 1s ease-in 1s forwards;
+    }
+    
+    .item3 { 
+      top: 60%; 
+      left: 90%; 
+      animation: fadeIn 1s ease-in 1.5s forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.8); 
+      }
+      to { 
+        opacity: 0.7; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+    
+    .whisper {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      text-align: center;
+      font-style: italic;
+      color: rgba(0, 255, 255, 0.5);
+      font-size: 1.5rem;
+      animation: whisper 4s ease-in-out infinite;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    
+    @keyframes whisper {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.9; }
+    }
+    
+    #inventory {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 12px 18px;
+      border: 2px dashed rgba(0, 255, 255, 0.6);
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      color: #0ff;
+      font-weight: bold;
+    }
+    
+    .guardian-title {
+      position: absolute;
+      top: 15%;
+      width: 100%;
+      text-align: center;
+      font-size: 2rem;
+      color: rgba(0, 255, 255, 0.8);
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+    
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+      50% { text-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .item {
+        width: 100px;
+        height: 100px;
+        font-size: 32px;
+      }
+      
+      .circle {
+        width: 300px;
+        height: 300px;
+      }
+      
+      .whisper {
+        font-size: 1.2rem;
+        bottom: 60px;
+      }
+      
+      .guardian-title {
+        font-size: 1.5rem;
+        top: 10%;
+      }
+      
+      #inventory {
+        font-size: 0.8rem;
+        padding: 10px 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .item {
+        width: 80px;
+        height: 80px;
+        font-size: 28px;
+      }
+      
+      .circle {
+        width: 250px;
+        height: 250px;
+      }
+      
+      .whisper {
+        font-size: 1rem;
+      }
+      
+      .guardian-title {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="water-effect"></div>
+  
+  <div id="container">
+    <div class="guardian-title">💧  💧</div>
+    
+    <div id="inventory">
+      🌊 <span id="inventory-content">Carregando...</span>
+    </div>
+    
+    <div class="circle">
+      <div class="item item1" 
+           onclick="goTo('002.html')" 
+           title="Portal da Luz"
+           aria-label="Porta para a sala da luz">
+        🚪
+      </div>
+      
+      <div class="item item2" 
+           onclick="goTo('003.html')" 
+           title="Portal das Sombras"
+           aria-label="Porta para a sala das sombras">
+        🚪
+      </div>
+      
+      <div class="item item3" 
+           onclick="goTo('004.html')" 
+           title="Portal do Mistério"
+           aria-label="Porta para a sala do mistério">
+        🚪
+      </div>
+    </div>
+    
+    <div class="whisper">
+      道を選べ... 🪞 Choose your path... Escolha o caminho...
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'inventarioYui';
+    
+    // Carregar inventário
+    function loadInventory() {
+      try {
+        const inventory = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+        const inventoryContent = document.getElementById('inventory-content');
+        
+        if (inventory.length === 0) {
+          inventoryContent.textContent = 'Vazio';
+        } else {
+          inventoryContent.textContent = inventory.join(' ');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar inventário:', error);
+        document.getElementById('inventory-content').textContent = 'Erro';
+      }
+    }
+    
+    // Função para navegar entre salas
+    function goTo(page) {
+      try {
+        // Salvar elemento água no inventário se não existir
+        let inventory = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+        const waterElement = '💧';
+        
+        if (!inventory.includes(waterElement)) {
+          inventory.push(waterElement);
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
+        }
+        
+        // Efeito visual antes de redirecionar
+        const clickedItem = event.target;
+        clickedItem.style.transform = 'scale(0.9)';
+        clickedItem.style.opacity = '0.5';
+        
+        setTimeout(() => {
+          window.location.href = page;
+        }, 300);
+        
+      } catch (error) {
+        console.error('Erro ao navegar:', error);
+        // Fallback: redirecionar mesmo com erro
+        window.location.href = page;
+      }
+    }
+    
+    // Efeito de hover nos itens
+    function initializeItems() {
+      const items = document.querySelectorAll('.item');
+      
+      items.forEach((item, index) => {
+        item.addEventListener('mouseenter', () => {
+          item.style.opacity = '1';
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          item.style.opacity = '0.7';
+        });
+      });
+    }
+    
+    // Inicialização
+    window.addEventListener('load', () => {
+      loadInventory();
+      initializeItems();
+    });
+    
+    // Preload das próximas páginas
+    const nextPages = ['002.html', '003.html', '004.html'];
+    nextPages.forEach(page => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = page;
+      document.head.appendChild(link);
+    });
+  </script>
+  
+  <!-- Desenvolvido por Akatsuki | Projeto M.Y.S. 🌸 -->
+</body>
+</html>

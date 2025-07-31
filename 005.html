@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>泡の記憶 — Sala 5</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #a9a9a9 20%, #000000 100%);
+      color: #00ffee;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .interface {
+      position: relative;
+      z-index: 10;
+      padding: 30px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .choices button {
+      background: #D3D3D3;
+      border: 1px solid #00ffee88;
+      color: #00ffee;
+      padding: 12px 24px;
+      margin: 10px auto;
+      font-size: 2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      display: block;
+      animation: pulse 1.8s infinite;
+    }
+    .choices button:hover {
+      background: #00ffee22;
+      transform: scale(1.05);
+    }
+    .question {
+      display: none;
+      margin-top: 30px;
+    }
+    .question button {
+      background: #111;
+      border: 1px solid #00ffee88;
+      color: #00ffee;
+      padding: 10px 20px;
+      margin: 10px auto;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      display: block;
+      animation: pulse 2s infinite;
+    }
+    .question button:hover {
+      background: #00ffee22;
+      transform: scale(1.05);
+    }
+    .result, .next-step {
+      margin-top: 40px;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .fade-bubble {
+      position: absolute;
+      font-size: 0.9rem;
+      color: #00ffee88;
+      animation: fadeout 6s forwards;
+    }
+    @keyframes fadeout {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.7); }
+    }
+    .whispers {
+      position: absolute;
+      bottom: 10%;
+      width: 100%;
+      text-align: center;
+      color: #00ffee55;
+      font-style: italic;
+      font-size: 0.8rem;
+      animation: whisperFade 8s infinite;
+    }
+    @keyframes whisperFade {
+      0%, 100% { opacity: 0; }
+      40%, 60% { opacity: 1; }
+    }
+    .hidden-button-nav {
+      cursor: pointer;
+      text-decoration: underline;
+      color: #00ffee;
+    }
+    .hidden-button-nav:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+<canvas id="bubbles"></canvas>
+<div class="interface">
+  <h1>🌫️ 選んでください:</h1>
+  <div class="choices" id="choiceArea">
+    <button onclick="startQuiz('📖 Livro')">📖 </button>
+    <button onclick="startQuiz('📓 Diário')">📓 </button>
+    <button onclick="startQuiz('📄 Papel')">🧾 </button>
+  </div>
+  <div class="question" id="quizArea">
+    <div id="questionText"></div>
+    <div id="answers"></div>
+  </div>
+  <div class="result" id="result"></div>
+  <div class="next-step" id="nextStep"></div>
+</div>
+<div class="whispers" id="whisper">「記憶の泡が…まだここに。」
+ <p>Pronto para <span class="hidden-button-nav" onclick="location.href='001.html'"> 🔁</span></p>
+</div>
+
+<script>
+const canvas = document.getElementById('bubbles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const bubbles = Array(80).fill().map(() => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: Math.random() * 2 + 1,
+  s: Math.random() * 0.5 + 0.2
+}));
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00ffee33';
+  bubbles.forEach(b => {
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.fill();
+    b.y -= b.s;
+    if (b.y < 0) b.y = canvas.height;
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+
+const whispers = [
+  '「記憶の泡が…まだここに。」',
+  '「誰かの声が、静かに響く…」',
+  '「忘れられた物語が目を覚ます…」'
+];
+
+setInterval(() => {
+  document.getElementById('whisper').innerText = whispers[Math.floor(Math.random() * whispers.length)];
+}, 9000);
+
+const questions = [
+  { q: 'You "WOKE UP" – what did you see? / 「目覚めた」何が見えた？？', options: ['', '⏱️ 🔍', '🕳 ⏱️ 🗝 ✍:⌘ 🔍👂 ', '🗝 ✍: '], correct: 0 },
+  { q: 'O QUE PROCURA？What are you looking for? / 何を探している？', options: ['答え', 'Exit', 'OBSERVADOR', 'YOU'], correct: 1 },
+  { q: 'Where is this place? / ここはどこ？？', options: ['MUNDO PARARELO', 'Library', 'ミステリー', 'GAME'], correct: 1 },
+  { q: 'How did you learn history so far? / 今までどうやって歴史を学んだ？？', options: ['BOOK', 'VENDO', 'Feeling / 感じる', 'PRESENTIANDO'], correct: 1 },
+  { q: 'O QUE SIGNIFICA VIDA？What does LIFE mean?', options: ['To Feel / 感じる', 'Smell / 匂い', 'Move / 動く', 'ESCUTAR'], correct: 2 },
+  { q: 'QUANTAS LINGUAS VOCE VIU ATE AGORA？How many languages have you seen so far?', options: ['4', '2', '5', '1'], correct: 0 }
+];
+
+let inventory = ['🌪️ Ar'];
+let currentQ = [];
+let score = 0;
+let currentIndex = 0;
+let selectedItem = '';
+
+function startQuiz(item) {
+  selectedItem = item;
+  document.getElementById('choiceArea').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'block';
+  currentQ = questions.sort(() => 0.5 - Math.random()).slice(0, 3);
+  score = 0;
+  currentIndex = 0;
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = currentQ[currentIndex];
+  document.getElementById('questionText').innerText = q.q;
+  const answersDiv = document.getElementById('answers');
+  answersDiv.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.onclick = () => handleAnswer(i);
+    answersDiv.appendChild(btn);
+  });
+}
+
+function handleAnswer(index) {
+  if (index === currentQ[currentIndex].correct) score++;
+  currentIndex++;
+  if (currentIndex < 3) {
+    showQuestion();
+  } else {
+    endQuiz();
+  }
+}
+
+function endQuiz() {
+  document.getElementById('quizArea').style.display = 'none';
+  
+  let resText;
+  let redirectPage;
+  
+  if (score === 3) {
+    // Acertou todas - redireciona para 008.html
+    resText = `🎉 Perfeito! Você ganhou: ${selectedItem}`;
+    inventory.push(selectedItem);
+    redirectPage = '029.html';
+  } else {
+    // Errou pelo menos uma - redireciona para 002.html
+    resText = `⚠️ Você errou ${3 - score} resposta(s). Item perdido.`;
+    redirectPage = '002.html';
+  }
+  
+  document.getElementById('result').innerText = resText + `\nInventário atual: ${inventory.join(', ')}`;
+  
+  // Botão de redirecionamento baseado no resultado
+  document.getElementById('nextStep').innerHTML = `
+    <p>Preparado para continuar?</p>
+    <button onclick="location.href='${redirectPage}'" style="
+      background: #111;
+      border: 1px solid #00ffee88;
+      color: #00ffee;
+      padding: 15px 30px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    ">
+      ${score === 3 ? '🎊 Continuar!' : '🚪 Continuar'}
+    </button>
+  `;
+  
+  // Auto-redirecionamento após 5 segundos (opcional)
+  setTimeout(() => {
+     window.location.href = "029.html";
+  }, 10000);
+}
+</script>
+</body>
+</html>

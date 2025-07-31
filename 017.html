@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>泡の記憶 — Sala 5</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #a9a9a9 20%, #dda0dd 100%);
+      color: #c0c0c;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .interface {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      padding: 20px;
+      text-align: center;
+      width: 90%;
+    }
+    h1 {
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      margin: 0;
+    }
+   
+    .fade-bubble {
+      position: absolute;
+      font-size: 0.9rem;
+      color: #00ffee88;
+      animation: fadeout 6s forwards;
+    }
+    @keyframes fadeout {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.7); }
+    }
+    .mensagem {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      text-align: center;
+      font-size: clamp(1rem, 3vw, 1.4em);
+      line-height: 1.6em;
+      opacity: 0;
+      animation: surgir 5s ease-in-out forwards;
+      animation-delay: 2s;
+      z-index: 5;
+    }
+    @keyframes surgir {
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .velas-container {
+      position: absolute;
+      bottom: 10%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: flex-end;
+      padding: 0 5%;
+      z-index: 15;
+    }
+    
+    .vela {
+      position: relative;
+      width: clamp(15px, 3vw, 25px);
+      height: clamp(40px, 8vw, 70px);
+      background: #fff5cc;
+      border-radius: 5px;
+      box-shadow: 0 -10px 20px rgba(255, 245, 204, 0.3);
+      animation: piscar 3s infinite alternate ease-in-out, flutuar 4s infinite ease-in-out;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .vela:hover {
+      transform: scale(1.1);
+    }
+    
+    .vela::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(8px, 2vw, 15px);
+      height: clamp(12px, 3vw, 25px);
+      background: radial-gradient(circle, #ffcc00 0%, #ff6600 60%, transparent 80%);
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: chama 1.5s infinite alternate ease-in-out;
+    }
+    
+    @keyframes chama {
+      from { transform: translateX(-50%) translateY(0); opacity: 1; }
+      to   { transform: translateX(-50%) translateY(-3px); opacity: 0.7; }
+    }
+    @keyframes piscar {
+      from { opacity: 0.8; }
+      to   { opacity: 1; }
+    }
+    
+    @keyframes flutuar {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .vela:nth-child(1) { animation-delay: 0s; }
+    .vela:nth-child(2) { animation-delay: 0.8s; }
+    .vela:nth-child(3) { animation-delay: 1.6s; }
+    .vela:nth-child(4) { animation-delay: 2.4s; }
+    .vela:nth-child(5) { animation-delay: 3.2s; }
+    
+    .sussurro {
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 20;
+    }
+    
+    .sussurro::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: rgba(0, 0, 0, 0.8);
+    }
+    
+    .vela:hover .sussurro {
+      opacity: 1;
+      animation: sussurroAnim 2s ease-in-out;
+    }
+    
+    @keyframes sussurroAnim {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-5px); }
+    }
+    
+    .contador {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, );
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: clamp(0.8rem, 2.5vw, 1rem);
+      color: #;
+      z-index: 25;
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .interface {
+        top: 3%;
+      }
+      .mensagem {
+        top: 50%;
+        width: 95%;
+      }
+      .velas-container {
+        bottom: 15%;
+        padding: 0 2%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .interface {
+        top: 2%;
+      }
+      .mensagem {
+        top: 45%;
+      }
+      .velas-container {
+        bottom: 20%;
+      }
+    }
+    
+    @media (orientation: landscape) and (max-height: 600px) {
+      .interface {
+        top: 2%;
+      }
+      .mensagem {
+        top: 35%;
+        font-size: clamp(0.8rem, 2vw, 1rem);
+      }
+      .velas-container {
+        bottom: 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+<canvas id="bubbles"></canvas>
+<div class="interface">
+  <h1>🌫</h1>
+</div>
+
+<div class="mensagem">
+  <p>"答えのいらない選択."</p>
+  <p>"Silence also speaks."</p>
+  <p>"O coração fala quando a razão se cala."</p>
+</div>
+
+<div class="contador" id="contador">30</div>
+
+<div class="velas-container">
+  <div class="vela">
+    <div class="sussurro"> 過去の秘密...</div>
+  </div>
+  <div class="vela">
+    <div class="sussurro">O futuro sussurra baixinho...</div>
+  </div>
+  <div class="vela">
+    <div class="sussurro">As memórias dançam na chama炎に舞う記憶...</div>
+  </div>
+  <div class="vela">
+    <div class="sussurro">The heart knows....</div>
+  </div>
+  <div class="vela">
+    <div class="sussurro">O tempo revela tudo...</div>
+  </div>
+</div>
+
+<script>
+// Bolhas animadas
+const canvas = document.getElementById('bubbles');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const bubbles = Array(80).fill().map(() => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: Math.random() * 2 + 1,
+  s: Math.random() * 0.5 + 0.2
+}));
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00ffee33';
+  bubbles.forEach(b => {
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.fill();
+    b.y -= b.s;
+    if (b.y < 0) {
+      b.y = canvas.height;
+      b.x = Math.random() * canvas.width;
+    }
+  });
+  requestAnimationFrame(draw);
+}
+
+draw();
+
+// Contador regressivo de 30 segundos
+let segundos = 10;
+const contadorElement = document.getElementById('contador');
+
+const intervalo = setInterval(() => {
+  segundos--;
+  contadorElement.textContent = segundos;
+  
+  if (segundos <= 0) {
+    clearInterval(intervalo);
+    // Redirecionar para 19.html
+    window.location.href = '016.html';
+  }
+}, 2000);
+
+// Redimensionar canvas quando a tela mudar de orientação
+window.addEventListener('orientationchange', () => {
+  setTimeout(resizeCanvas, 100);
+});
+</script>
+</body>
+</html>

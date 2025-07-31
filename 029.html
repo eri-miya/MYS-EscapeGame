@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>🎵 Mini Quiz M.Y.S. 🎵</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px #ffb6ff;
+    }
+   
+   
+   .answers {
+    list-style: none;
+    padding: 0;
+  }
+  .answers li {
+    margin-bottom: 10px;
+  }
+  button.answer-btn {
+    background: #6e3e8e;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    padding: 12px 18px;
+    width: 100%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  button.answer-btn:hover {
+    background: #a466c5;
+  }
+  .feedback {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    min-height: 24px;
+  }
+  .next-btn {
+    margin-top: 20px;
+    background: #e98eff;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+    font-size: 1.1rem;
+  }
+  .next-btn:hover {
+    background: #ffb3ff;
+  }
+  .score {
+    font-size: 1.3rem;
+    text-align: center;
+    margin-top: 20px;
+    color: #ffccff;
+    text-shadow: 0 0 15px #ffccff;
+  }
+    .option:hover {
+      background: #ff2e63;
+    }
+    .reveal {
+      margin-top: 2rem;
+      font-family: 'Sawarabi Mincho', serif;
+      font-size: 1.1rem;
+      color: #ffd6ff;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+  <h1>Mini Quiz M.Y.S</h1>
+  <div class="question-container">
+    <div class="question">Pergunta aqui</div>
+    <ul class="answers">
+      
+    </ul>
+    <div class="feedback"></div>
+    <button class="next-btn">Próxima</button>
+  </div>
+  <div class="score" style="display:none;"></div>
+</div>
+
+<script>
+  const quizData = [
+    {
+      question: "VOCE E ?",
+      answers: [
+        "OTAKU",
+        "CURIOSO",
+        "COMUNICATIVO",
+        "EXPLOSIVO"
+      ],
+      correctIndex: 1,
+      wrongMsg: "VOCE PODE SE MOLDAR A TUDO! 🐢"
+    },
+    {
+      question: "Qual o lugar que prefere para refletir?",
+      answers: [
+        "Mar",
+        "Montanha",
+        "Viajar ",
+        "Casa"
+      ],
+      correctIndex: 3,
+      wrongMsg: "E SO ACHAR UM LUGAR ESPECIAL NAO IMPORTA ONDE! 🌸"
+    },
+    {
+      question: "VOCE SE MOLDA PARA SOCIEDADE ?",
+      answers: [
+        "NAO",
+        "SIM",
+        "AS VEZES",
+        "DEPENDE PARA QUE"
+      ],
+      correctIndex: 3,
+      wrongMsg: "SEJE VOCE SEMPRE ! 💡"
+    },
+    {
+      question: "Por que é importante trabalhar em equipe ?",
+      answers: [
+        "Aprender e ter experiencias novas",
+        "Para dividir o trabalho e crescer juntos",
+        "Para competir e ganhar prêmios",
+        "Para terminar rápido e esquecer"
+      ],
+      correctIndex: 1,
+      wrongMsg: "Juntos somos mais fortes! 🤝"
+    },
+    {
+      question: "Qual dessas frases combina com voce ?",
+      answers: [
+        "Juntos somos mais fortes.",
+        "Cada um por si, Deus por todos.",
+        "Não preciso de ajuda.",
+        "Só eu faço direito."
+      ],
+      correctIndex: 0,
+      wrongMsg: "Ninguém vence sozinho! 🌟"
+    }
+  ];
+
+  const questionElem = document.querySelector('.question');
+  const answersElem = document.querySelector('.answers');
+  const feedbackElem = document.querySelector('.feedback');
+  const nextBtn = document.querySelector('.next-btn');
+  const scoreElem = document.querySelector('.score');
+
+  let currentQuestion = 0;
+  let score = 0;
+  let answered = false;
+
+  function loadQuestion() {
+    answered = false;
+    feedbackElem.textContent = '';
+    nextBtn.style.display = 'none';
+
+    const q = quizData[currentQuestion];
+    questionElem.textContent = q.question;
+
+    answersElem.innerHTML = '';
+    q.answers.forEach((answer, index) => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+      btn.textContent = answer;
+      btn.addEventListener('click', () => selectAnswer(index));
+      li.appendChild(btn);
+      answersElem.appendChild(li);
+    });
+  }
+
+  function selectAnswer(index) {
+    if (answered) return;
+    answered = true;
+
+    const q = quizData[currentQuestion];
+    if (index === q.correctIndex) {
+      feedbackElem.textContent = '✔️ Correto!';
+      score++;
+    } else {
+      feedbackElem.textContent = `❌ ${q.wrongMsg}`;
+    }
+    nextBtn.style.display = 'block';
+  }
+
+  nextBtn.addEventListener('click', () => {
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+      loadQuestion();
+    } else {
+      showScore();
+    }
+  });
+
+  function showScore() {
+    questionElem.style.display = 'none';
+    answersElem.style.display = 'none';
+    feedbackElem.style.display = 'none';
+    nextBtn.style.display = 'none';
+    scoreElem.style.display = 'block';
+    if (score === quizData.length) {
+      scoreElem.textContent = `🎉 REALMENTE E VOCE ! Você acertou tudo! 🎉`;
+    } else {
+      scoreElem.textContent = `NAO IMPORTA O RESULTADO, gambate!  ${score} de ${quizData.length}.`;
+    }
+  }
+
+  loadQuestion();
+  setTimeout(() => {
+      window.location.href = "002.html";
+    }, 30000); // 30 segundos = 20000 milissegundos
+  
+  </script>
+  <p><span class="hidden-button-nav" onclick="location.href='002.html'"> ✨</span>?
+</body>
+</html>

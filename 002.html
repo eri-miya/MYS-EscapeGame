@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <title>M.Y.S. - Sala das Escolhas Final</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Press Start 2P', cursive;
+            color: #E0E0E0;
+            transition: background-color 3s ease-in;
+        }
+
+        .container {
+            text-align: center;
+            opacity: 0;
+            transition: opacity 3s ease-in;
+            max-width: 90%;
+        }
+
+        .sussurro-principal {
+            font-size: clamp(0.6em, 2vw, 0.4em);
+            color: rgba(224, 224, 224, 0.7);
+            margin-bottom: 50px;
+            opacity: 0;
+            transition: opacity 3s ease-in;
+            animation: pulse-sussurro 5s infinite alternate;
+        }
+
+        @keyframes pulse-sussurro {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .mission-message {
+            font-size: clamp(1em, 2vw, 0.9em);
+            color: #00ffff;
+            margin-bottom: 30px;
+            opacity: 0;
+            transition: opacity 3s ease-in-out;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .porta-container {
+            display: flex;
+            gap: clamp(20px, 5vw, 60px);
+            margin-top: 50px;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 3s ease-in;
+            flex-wrap: wrap;
+        }
+
+        .porta-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sussurro-acima-porta {
+            font-size: clamp(0.6em, 1.3vw, 1.2em);
+            color: rgba(255, 255, 255, 0.9);
+            position: absolute;
+            top: -50px;
+            width: 200%;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            z-index: 10;
+            line-height: 1.2;
+        }
+
+        .porta {
+            background: linear-gradient(to bottom, #4a2c00, #362000);
+            border: 2px solid #5a3c00;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.6);
+            width: clamp(80px, 15vw, 120px);
+            height: clamp(150px, 25vh, 200px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .porta:hover {
+            background: linear-gradient(to bottom, #5a3c00, #463000);
+            box-shadow: 0 0 25px rgba(255, 165, 0, 0.8), 0 8px 20px rgba(0, 0, 0, 0.8);
+            transform: translateY(-8px);
+        }
+
+        .porta:active {
+            transform: translateY(-4px);
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.6);
+        }
+
+        .porta .simbolo-porta {
+            font-size: clamp(2em, 6vw, 3.5em);
+            margin-bottom: 15px;
+            color: #ffe0b3;
+            line-height: 1;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .porta h2 {
+            font-size: clamp(0.6em, 1.5vw, 1.1em);
+            margin: 0;
+            color: #E0E0E0;
+            line-height: 1.2;
+        }
+
+        #inventory-message {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(50, 50, 0, 0.9);
+            border: 2px solid #ffe0b3;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: clamp(0.6em, 1.5vw, 0.8em);
+            color: #ffe0b3;
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(255, 224, 179, 0.3);
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2em;
+            color: #00ffff;
+            opacity: 0;
+            z-index: 2000;
+        }
+
+        /* Responsividade para telas pequenas */
+        @media (max-width: 768px) {
+            .porta-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+            
+            .sussurro-acima-porta {
+                top: -60px;
+                width: 250%;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+
+        /* Efeito de partículas de fundo */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 8s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loadingText">Carregando...</div>
+
+    <div class="container" id="gameContainer">
+        <p class="mission-message" id="missionMessage">Vazio.... Fragmentos... Memory...</p>
+        <p class="sussurro-principal" id="mainSussurro">"Curioso...? A place so cold and empty... 物語... 真実"</p>
+        
+        <div class="porta-container" id="portaContainer">
+            <div class="porta-wrapper" id="wrapperBiblioteca">
+                <p class="sussurro-acima-porta">"輝くもの全てが金ではない。真の知識は闇に宿ることもある。"</p>
+                <div class="porta" id="porta1" data-target="005.html">
+                    <span class="simbolo-porta">📚</span>
+                    <h2>LIBRARY</h2>
+                </div>
+            </div>
+            <div class="porta-wrapper" id="wrapperEscritorio">
+                <p class="sussurro-acima-porta">"The truth might be hidden between the lines of a report."</p>
+                <div class="porta" id="porta2" data-target="006.html">
+                    <span class="simbolo-porta">🖥</span>
+                    <h2>OFFICE</h2>
+                </div>
+            </div>
+            <div class="porta-wrapper" id="wrapperLaboratorio">
+                <p class="sussurro-acima-porta">"Algumas fórmulas devem ser misturadas com cautela."</p>
+                <div class="porta" id="porta3" data-target="007.html">
+                    <span class="simbolo-porta">🧪</span>
+                    <h2>LABORATÓRIO</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="inventory-message">
+        🌌 
+    </div>
+
+    <script>
+        class GameController {
+            constructor() {
+                this.elements = {
+                    body: document.body,
+                    gameContainer: document.getElementById('gameContainer'),
+                    mainSussurro: document.getElementById('mainSussurro'),
+                    missionMessage: document.getElementById('missionMessage'),
+                    inventoryMessage: document.getElementById('inventory-message'),
+                    portaContainer: document.getElementById('portaContainer'),
+                    loadingText: document.getElementById('loadingText')
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.createParticles();
+                this.startIntroSequence();
+                this.setupPortaEvents();
+            }
+
+            createParticles() {
+                // Criar partículas de fundo para atmosfera
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        this.createParticle();
+                    }, Math.random() * 10000);
+                }
+            }
+
+            createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                document.body.appendChild(particle);
+
+                // Remove a partícula após a animação
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 8000);
+
+                // Criar nova partícula
+                setTimeout(() => {
+                    this.createParticle();
+                }, Math.random() * 3000 + 1000);
+            }
+
+            startIntroSequence() {
+                // Mostrar loading
+                setTimeout(() => {
+                    this.elements.loadingText.style.opacity = 1;
+                }, 100);
+
+                // Esconder loading e começar sequência
+                setTimeout(() => {
+                    this.elements.loadingText.style.opacity = 0;
+                    this.elements.body.style.backgroundColor = '#202020';
+                    this.elements.gameContainer.style.opacity = 1;
+                    this.elements.missionMessage.style.opacity = 1;
+                }, 1500);
+
+                setTimeout(() => {
+                    this.elements.body.style.backgroundColor = '#404040';
+                    this.elements.mainSussurro.style.opacity = 1;
+                }, 3000);
+
+                setTimeout(() => {
+                    this.elements.body.style.backgroundColor = '#606060';
+                    this.elements.portaContainer.style.opacity = 1;
+                }, 5000);
+
+                setTimeout(() => {
+                    this.elements.inventoryMessage.style.opacity = 1;
+                }, 7500);
+            }
+
+            setupPortaEvents() {
+                const portasWrappers = document.querySelectorAll('.porta-wrapper');
+
+                portasWrappers.forEach(wrapper => {
+                    const porta = wrapper.querySelector('.porta');
+                    const sussurroAcima = wrapper.querySelector('.sussurro-acima-porta');
+
+                    // Hover events
+                    porta.addEventListener('mouseenter', () => {
+                        sussurroAcima.style.opacity = 1;
+                    });
+
+                    porta.addEventListener('mouseleave', () => {
+                        sussurroAcima.style.opacity = 0;
+                    });
+
+                    // Click event
+                    porta.addEventListener('click', (e) => {
+                        this.handlePortaClick(e.currentTarget);
+                    });
+                });
+            }
+
+            handlePortaClick(porta) {
+                const targetUrl = porta.getAttribute('data-target');
+                const escolha = porta.querySelector('h2').textContent.trim();
+
+                if (targetUrl) {
+                    console.log(`Você escolheu: ${escolha}! Redirecionando para ${targetUrl}...`);
+                    
+                    // Efeito de transição antes do redirect
+                    porta.style.transform = 'scale(1.1)';
+                    porta.style.boxShadow = '0 0 30px rgba(255, 165, 0, 1)';
+                    
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 500);
+                } else {
+                    console.error('URL de destino não encontrada para:', escolha);
+                }
+            }
+        }
+
+        // Inicializar o jogo quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            new GameController();
+        });
+
+        // Tratamento de erro para fontes não carregadas
+        document.fonts.ready.then(() => {
+            console.log('Fontes carregadas com sucesso');
+        }).catch(() => {
+            console.warn('Erro ao carregar fontes, usando fallback');
+        });
+    </script>
+</body>
+</html>

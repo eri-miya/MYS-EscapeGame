@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Terminal o pc em coma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <style>
+    body {
+      background: black;
+      color: #00ffcc;
+      font-family: monospace;
+      padding: 5vw;
+      margin: 0;
+    }
+    .line {
+      white-space: pre-wrap;
+      overflow: hidden;
+      border-right: 2px solid #00ffcc;
+      animation: blink 1s step-end infinite alternate;
+      font-size: 4vw;
+      max-width: 100%;
+    }
+    @media (min-width: 600px) {
+      .line { font-size: 1.2em; }
+    }
+    .coma {
+      color: #ff4444;
+      margin-top: 15px;
+      font-size: 4.5vw;
+      animation: coma-blink 2s infinite;
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+    @keyframes coma-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    #bbButton {
+      background: #808080;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #bbArea {
+      display: none;
+      margin-top: 30px;
+      padding: 15px;
+      background: #001010;
+      border-left: 4px solid #00ffcc;
+      border-radius: 8px;
+    }
+    #bbTalk {
+      white-space: pre-line;
+      color: #00ffff;
+      font-weight: bold;
+    }
+    #kamuiMsg {
+      display: none;
+      margin-top: 20px;
+      color: #66ffcc;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="line">k@core:~$ sudo rewire --limit_break</div>
+  <div class="line">e@mys:~$ sudo inject reiniciar</div>
+  <div class="line">k@core:~$ sudo echo "loop!" > ./core.start</div>
+  <div class="line">e@mys:~$ sudo sudo sudo sudo sudo sudo</div>
+  <div class="line coma">system status: ______loop______</div>
+
+  <button id="bbButton" onclick="BB()">🆘 </button>
+
+  <div id="bbArea">
+    <div id="bbTalk">...</div>
+  </div>
+
+  <div id="kMsg">console.log("reiniciar...");
+}!</div>
+
+  <script>
+    function chamarBB() {
+      const bbArea = document.getElementById('bbArea');
+      const bbTalk = document.getElementById('bbTalk');
+      const kamuiMsg = document.getElementById('kMsg');
+      const frases = [
+        "Sistema ativo... memória presente acessada",
+        "Iniciando leitura....",
+        "⚙️ if (esperança) {",
+        "continue;",
+        "} else {。"
+      ];
+      let i = 0;
+      bbArea.style.display = "block";
+      bbTalk.textContent = "";
+      function digitar() {
+        if (i < frases.length) {
+          bbTalk.textContent += frases[i] + "\n";
+          i++;
+          setTimeout(digitar, 1500);
+        } else {
+          kamuiMsg.style.display = "block";
+        }
+      }
+      digitar();
+    }
+  </script>
+
+</body>
+<!-- Botão formiga -->
+<div id="ant-button" style="font-size: 28px; cursor: pointer; text-align: center; margin-top: 40px;">💀</div>
+
+<!-- Terminal Hacker -->
+<div id="hacker-terminal" style="display:none; color:#00ffcc; font-family: monospace; background:#000; padding:20px; margin-top:20px; border:1px solid #00ffcc; border-radius:8px; max-width: 90%; margin-left:auto; margin-right:auto;">
+  <pre id="terminal-output"></pre>
+  <div id="next-button" style="display:none; margin-top:20px; text-align:center;">
+    <button onclick="window.location.href='014.html'" style="padding:10px 20px; font-size:1.1em; background:#ff4444; color:#fff; border:none; border-radius:6px; cursor:pointer;">⚠️ Ir para a próxima sala</button>
+  </div>
+  <p style="text-align:right; font-size:0.8em; color:#00ffaa88;">— loops 💀</p>
+</div>
+
+<style>
+  .shake {
+    animation: shake 0.5s;
+    animation-iteration-count: 4;
+  }
+
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+</style>
+
+<script>
+  const ant = document.getElementById("ant-button");
+  const terminal = document.getElementById("hacker-terminal");
+  const output = document.getElementById("terminal-output");
+  const nextButton = document.getElementById("next-button");
+
+  const frases = [
+    "k@mys:~$ iniciando protocolo reverso...",
+    "e@local:~$ sudo abrir conexão com terminal",
+    "k@mys:~$ inserindo... força M.Y.S",
+    "sistema: [ERRO] loop detectado",
+    "e@local:~$ Erro... erro... bug... loop detectado...",
+    "bb@global:~$ ...🌀 Tentativa de manter o sistema em funcionamento...",
+    "k@mys:~$ ⌛ Falha detectada.",
+    "sistema: reiniciando em 3... 2... 1...",
+    "[✓] caos contido com sucesso. ⌘ Reinício automático em 3... 2... 1...`;"
+   
+  ];
+
+  ant.addEventListener("click", () => {
+    terminal.style.display = "block";
+    output.innerText = "";
+    terminal.classList.remove("shake");
+    let i = 0;
+    let intervalo = setInterval(() => {
+      if (i < frases.length) {
+        output.innerText += frases[i] + "\n";
+        i++;
+      } else {
+        clearInterval(intervalo);
+        terminal.classList.add("shake");
+        nextButton.style.display = "block";
+      }
+    }, 1400);
+  });
+</script>
+
+</script>
+
+</html>

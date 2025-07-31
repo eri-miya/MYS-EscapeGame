@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌀 Sala da Escolha - Escape Game</title>
+  <meta name="description" content="Sala da Escolha - Escolha seu caminho no jogo de escape">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(ellipse at center, #000 0%, #111 100%);
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      color: #ccc;
+      height: 100vh;
+    }
+    
+    .container {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .object {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      text-align: center;
+      opacity: 0;
+      transition: all 0.8s ease;
+      cursor: pointer;
+      box-shadow: 0 0 20px transparent;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .object:hover {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+      opacity: 1;
+      transform: scale(1.1);
+      border-color: rgba(0, 255, 255, 0.5);
+    }
+    
+    .object:active {
+      transform: scale(0.95);
+    }
+    
+    .circle {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 2px dashed rgba(68, 68, 68, 0.4);
+      position: relative;
+      animation: rotate 30s linear infinite;
+    }
+    
+    .object.visible {
+      opacity: 1;
+      animation: fadeIn 1s ease-in;
+    }
+    
+    .sussurro {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #aaa;
+      opacity: 0.3;
+      font-style: italic;
+      animation: pulseText 5s ease-in-out infinite;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    
+    .inventory {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(51, 51, 51, 0.6);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #0ff;
+      max-width: 180px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .inventory-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #fff;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+      padding-bottom: 4px;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+      z-index: 0;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .object {
+        width: 120px;
+        height: 120px;
+        font-size: 2.5rem;
+      }
+      
+      .circle {
+        width: 250px;
+        height: 250px;
+      }
+      
+      .sussurro {
+        font-size: 1.2rem;
+        bottom: 40px;
+      }
+      
+      .inventory {
+        max-width: 140px;
+        font-size: 0.8rem;
+        top: 10px;
+        right: 10px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .object {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+      }
+      
+      .circle {
+        width: 200px;
+        height: 200px;
+      }
+      
+      .sussurro {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="container">
+    <div class="circle">
+      <div class="object visible" 
+           style="top: -60px; left: 100px;" 
+           onclick="addItem('🔦', '002.html')"
+           title="Lanterna - Iluminar o caminho"
+           aria-label="Escolher lanterna">
+        🔦
+      </div>
+      
+      <div class="object visible" 
+           style="top: 240px; left: 10px;" 
+           onclick="addItem('🗝️', '003.html')"
+           title="Chave - Abrir portas"
+           aria-label="Escolher chave">
+        🗝️
+      </div>
+      
+      <div class="object visible" 
+           style="top: 150px; left: 170px;" 
+           onclick="addItem('🧾', '001.html')"
+           title="Documento - Informações importantes"
+           aria-label="Escolher documento">
+        🧾
+      </div>
+    </div>
+    
+    <div class="sussurro">
+      Escolha com cuidado... 👁️‍🗨️ 道を選べ... 🧭 Choose the path...
+    </div>
+    
+    <div class="inventory" id="inventory">
+      <div class="inventory-title">📦 Inventário</div>
+      <div id="inventory-items">Carregando...</div>
+    </div>
+  </div>
+
+  <script>
+    // Sistema de inventário melhorado
+    const STORAGE_KEY = 'inventarioYui';
+    
+    function loadInventory() {
+      try {
+        const inventory = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+        const inventoryItems = document.getElementById('inventory-items');
+        
+        if (inventory.length === 0) {
+          inventoryItems.innerHTML = '🌌 Vazio';
+        } else {
+          inventoryItems.innerHTML = inventory.join('<br>');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar inventário:', error);
+        document.getElementById('inventory-items').innerHTML = '❌ Erro';
+      }
+    }
+    
+    function addItem(item, redirectPage) {
+      try {
+        let inventory = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+        
+        // Evitar itens duplicados
+        if (!inventory.includes(item)) {
+          inventory.push(item);
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
+          
+          // Feedback visual
+          showItemAdded(item);
+        }
+        
+        // Pequeno delay para mostrar o feedback antes de redirecionar
+        setTimeout(() => {
+          window.location.href = redirectPage;
+        }, 300);
+        
+      } catch (error) {
+        console.error('Erro ao adicionar item:', error);
+        // Fallback: redirecionar mesmo com erro
+        window.location.href = redirectPage;
+      }
+    }
+    
+    function showItemAdded(item) {
+      const inventoryBox = document.getElementById('inventory');
+      const originalBorder = inventoryBox.style.border;
+      
+      // Efeito visual de item adicionado
+      inventoryBox.style.border = '2px solid #0ff';
+      inventoryBox.style.transform = 'scale(1.05)';
+      
+      setTimeout(() => {
+        inventoryBox.style.border = originalBorder;
+        inventoryBox.style.transform = 'scale(1)';
+        loadInventory(); // Atualizar o inventário
+      }, 200);
+    }
+    
+    // Animação de entrada dos objetos
+    function animateObjects() {
+      const objects = document.querySelectorAll('.object');
+      objects.forEach((obj, index) => {
+        setTimeout(() => {
+          obj.classList.add('visible');
+        }, index * 500);
+      });
+    }
+    
+    // Inicialização
+    window.addEventListener('load', () => {
+      loadInventory();
+      animateObjects();
+    });
+    
+    // Preload das próximas páginas
+    const nextPages = ['001.html', '002.html', '003.html'];
+    nextPages.forEach(page => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = page;
+      document.head.appendChild(link);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala 1 - O Despertar do Caos</title>
+    <style>
+        body {
+            background-color: #111;
+            color: #0ff;
+            font-family: "Courier New", monospace;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #aefaff;
+            text-shadow: 0 0 8px #00f0ff;
+            cursor: pointer;
+            user-select: none;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        h1 .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            /* bottom: 125%; MUDADO: Agora aparece ABAIXO do H1 */
+            top: 125%; /* Posição alterada para aparecer abaixo */
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.7em;
+            white-space: normal;
+            box-shadow: 0 0 10px #0ff;
+        }
+        /* MUDADO: Seta agora aponta para CIMA */
+        h1 .tooltip-text::after {
+            content: "";
+            position: absolute;
+            bottom: 100%; /* Posição alterada para aparecer acima do tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent; /* Cor da seta ajustada */
+        }
+        h1:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .glitch {
+            font-size: 1.5em;
+            animation: flicker 1s infinite;
+            margin-bottom: 30px;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        #alerta {
+            display: none;
+            margin-top: 40px;
+            color: red;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        #barra {
+            display: none;
+            width: 80%;
+            max-width: 500px;
+            height: 30px;
+            margin: 20px auto;
+            background-color: #333;
+            border: 2px solid #0ff;
+        }
+        #progresso {
+            width: 0%;
+            height: 100%;
+            background-color: #0ff;
+            animation: apagar 4s forwards;
+        }
+        @keyframes apagar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        button {
+            background-color: #0ff;
+            color: #111;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0cc;
+        }
+        @keyframes flash {
+            0% { background-color: #111; }
+            100% { background-color: #300; }
+        }
+        .assinatura {
+            margin-top: 60px;
+            font-size: 0.9em;
+            color: #555;
+            padding-bottom: 20px;
+        }
+
+        /* --- MEDIA QUERIES para Responsividade --- */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+                padding: 5px;
+            }
+            h1 .tooltip-text {
+                width: 200px;
+                margin-left: -100px;
+                font-size: 0.65em;
+                top: 115%; /* Ajusta posição em telas menores */
+            }
+            .glitch {
+                font-size: 1.2em;
+            }
+            #alerta {
+                font-size: 1em;
+            }
+            button {
+                padding: 12px 25px;
+                font-size: 0.9em;
+            }
+            #barra {
+                width: 90%;
+            }
+            .assinatura {
+                font-size: 0.8em;
+                margin-top: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            h1 .tooltip-text {
+                width: 180px;
+                margin-left: -90px;
+                font-size: 0.6em;
+            }
+            .glitch {
+                font-size: 1em;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="magic-title" id="mainTitle">
+         ⚠️ 気をつけて、システムが不安定....
+        <span class="tooltip-text"></span>
+    </h1>
+    <p class="glitch">  ⚔️ 🗂....</p>
+    <p><button onclick="ativarCaos()"> 💾... </button></p>
+
+    <div id="alerta">🚨 Apagando 🧠💥 ... 🧨</div>
+    <div id="barra"><div id="progresso"></div></div>
+
+    <script>
+        // Mensagem principal no título (duplo clique) - mantido
+        const mainTitle = document.getElementById('mainTitle');
+        let titleClickCount = 0;
+        let titleLastClickTime = 0;
+        const mainSecretMessage = "Se um dia eu pudesse ver, Meu passado inteiro, E fizesse parar de chover ,Nos primeiros erros 🌙"; // PRIMEIROS ERROS , CAPITAL INICIAL
+
+        mainTitle.addEventListener('click', function() {
+            const currentTime = new Date().getTime();
+            const timeDiff = currentTime - titleLastClickTime;
+
+            if (timeDiff < 300) {
+                titleClickCount++;
+                if (titleClickCount === 2) {
+                    alert(mainSecretMessage);
+                    titleClickCount = 0;
+                }
+            } else {
+                titleClickCount = 1;
+            }
+            titleLastClickTime = currentTime;
+        });
+
+        // Funcionalidade de ativação do caos
+        function ativarCaos() {
+            document.getElementById('alerta').style.display = 'block';
+            document.getElementById('barra').style.display = 'block';
+
+            document.body.style.animation = "flash 0.1s alternate infinite";
+            
+            setTimeout(() => {
+                alert('MEMORIA !! 🧠💥 !! 😂');
+
+                document.body.style.animation = "none";
+
+                window.location.href = "013.html";
+            }, 4000);
+        }
+        
+    </script>
+
+    <div class="assinatura"> 💙</div
+    </script>
+  <style>
+  .mensagem-flutuante {
+    position: fixed;
+    font-size: 0.9rem;
+    color: #ff9999;
+    opacity: 0;
+    font-style: italic;
+    text-shadow: 0 0 6px #ff6666bb;
+    background: rgba(40, 0, 0, 0.4);
+    padding: 6px 10px;
+    border-radius: 10px;
+    pointer-events: none;
+    animation: flutuar 5s ease-in-out infinite;
+  }
+
+  @keyframes flutuar {
+    0%, 100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateY(-10px);
+    }
+  }
+</style>
+
+<script>
+  const mensagens = [
+    
+    "🔒 Security layer 6 activated..",
+    
+  ];
+
+  // Criar as mensagens flutuantes em posições diferentes
+  mensagens.forEach((texto, i) => {
+    const div = document.createElement('div');
+    div.className = 'mensagem-flutuante';
+
+    // Posicionar aleatoriamente no canto direito inferior (com variações)
+    div.style.bottom = (10 + i * 30) + 'px'; // empilha verticalmente com espaçamento
+    div.style.right = (10 + (i % 3) * 120) + 'px'; // muda a posição horizontal em 3 colunas
+
+    div.textContent = texto;
+    document.body.appendChild(div);
+  });
+</script>
+</body>
+</html>

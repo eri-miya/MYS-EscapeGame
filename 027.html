@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Sala Final - Terminal do Observador</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ffcc;
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
+    }
+    .matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      z-index: 1;
+      pointer-events: none;
+    }
+    canvas {
+      display: block;
+    }
+    .panel {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border: 3px solid #00ffcc;
+      width: 80%;
+      max-width: 600px;
+      z-index: 3;
+      animation: blink 1.5s infinite alternate;
+    }
+    @keyframes blink {
+      from { opacity: 1; }
+      to { opacity: 0.2; }
+    }
+    .timer {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px;
+      z-index: 3;
+    }
+    .choices {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+    .choices button {
+      background: transparent;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .secret {
+      text-align: center;
+      margin-top: 10px;
+      color: #888;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer">⏳ Tempo restante: <span id="countdown">00:30</span></div>
+
+  <div class="panel" id="messagePanel">
+    <p id="message">“Você ainda se lembra quem era antes da escolha?”</p>
+  </div>
+
+  <div class="choices">
+    <button onclick="choose('continuar')">【 Continuar 】</button>
+    <button onclick="choose('sair')">【 Sair 】</button>
+    <div class="secret">
+      ou digite: <input id="secretCode" type="text" onkeyup="checkSecret(this.value)">
+    </div>
+  </div>
+
+  <div class="matrix">
+    <canvas id="matrixCanvas"></canvas>
+  </div>
+
+  <script>
+    // Timer
+    let timeLeft = 30;
+    const countdown = document.getElementById("countdown");
+    const timer = setInterval(() => {
+      timeLeft--;
+      countdown.textContent = `00:${timeLeft.toString().padStart(2, '0')}`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        document.getElementById("message").textContent = "Tempo esgotado. A cápsula foi encerrada.";
+      }
+    }, 1000);
+
+    // Mensagens piscantes
+    const messages = [
+      "Você ainda se lembra quem era antes da escolha?",
+      "A quinta essência não está no inventário. Está em você.",
+      "2 escolhas... mas quantas realidades?",
+      "Se você for uma de nós... por que hesita?",
+      "A Yui que travou te esperou até o fim..."
+    ];
+    let index = 1;
+    setInterval(() => {
+      if (index < messages.length) {
+        document.getElementById("message").textContent = `“${messages[index]}”`;
+        index++;
+      } else {
+        index = 0;
+      }
+    }, 5000);
+
+    // Escolhas
+    function choose(opcao) {
+      const panel = document.getElementById("message");
+      if (opcao === 'continuar') {
+        panel.textContent = "Fragmento do passado carregado: Você era uma Yui perdida no ciclo...";
+      } else if (opcao === 'sair') {
+        panel.textContent = "Você escolheu esquecer. Mas esquecer... também é uma escolha.";
+      }
+    }
+
+    // Final secreto
+    function checkSecret(value) {
+      if (value.trim().toLowerCase() === "tenho os 5 elementos da vida") {
+        document.body.style.background = "radial-gradient(#000000, #0f0f2e, #001f1f)";
+        document.getElementById("message").textContent = "Você se lembra. A cápsula está viva.";
+        clearInterval(timer);
+      }
+    }
+
+    // Matrix effect
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    const letters = Array(256).join("1").split("");
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ffcc";
+      letters.map((y_pos, index) => {
+        const text = String.fromCharCode(3e4 + Math.random() * 33);
+        const x_pos = index * 10;
+        ctx.fillText(text, x_pos, y_pos);
+        letters[index] = y_pos > 758 + Math.random() * 1e4 ? 0 : y_pos + 10;
+      });
+    }
+    setInterval(drawMatrix, 33);
+    
+     setTimeout(() => {
+      window.location.href = "019.html";
+    }, 20000); // 30 segundos = 30000 milissegundos
+  </script>
+</body>
+</html>

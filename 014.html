@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>⚠️ Limpeza do PC ⚠️</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Courier New', monospace;
+      color: lime;
+      height: 100vh;
+      background: linear-gradient(270deg, #111, #222, #111);
+      background-size: 600% 600%;
+      animation: fundo 10s ease infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes fundo {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    .progress-container {
+      width: 80%;
+      background-color: #333;
+      border: 2px solid red;
+      margin-top: 20px;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 30px;
+      background-color: red;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 20px;
+      text-align: center;
+    }
+    .emoji-buttons {
+      margin-top: 40px;
+      display: flex;
+      gap: 10px;
+    }
+    .emoji-buttons button {
+      font-size: 24px;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      background: black;
+      color: lime;
+      box-shadow: 0 0 10px red;
+    }
+    .emoji-buttons button:hover {
+      transform: scale(1.2);
+      background: red;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="titulo" onclick="contarClique()">⚠️ .FORMATTING.. ⚠️</h1>
+<div id="mensagemSecreta" style="display:none; margin-top:20px; font-size:16px; color:#0ff;">
+  ✉️ Yui: "Se você achou isso… é porque ainda sente.  
+  Mesmo quando tudo apagar, continue sentindo.  
+  A memória mais importante é aquela que ninguém vê, mas você guardou.  
+  Estamos sempre por perto. — Yui da Sala Perdida"
+</div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar">0%</div>
+  </div>
+  <div class="message" id="message">Por favor, não desligue o sistema...</div>
+
+  <div class="emoji-buttons" id="emojiButtons" style="display: none;">
+    <button onclick="location.href='002.html'">💥</button>
+    <button onclick="location.href='004.html'">🔧</button>
+    <button onclick="location.href='001.html'">⚠️</button>
+    <button onclick="location.href='010.html'">💀</button>
+    
+  </div>
+
+  <script>
+    let progress = 0;
+    const progressBar = document.getElementById("progressBar");
+    const message = document.getElementById("message");
+    const emojiButtons = document.getElementById("emojiButtons");
+
+    const mensagens = [
+      " memories returning......",
+      "ファイル復元中......",
+      "Formatando ...",
+      "exiting loop......",
+      "continuar..."
+      
+    ];
+
+    const interval = setInterval(() => {
+      if (progress < 90) {
+        progress += 1;
+        progressBar.style.width = progress + "%";
+        progressBar.innerText = progress + "%";
+        if (progress % 10 === 0) {
+          message.innerText = mensagens[(progress / 10) % mensagens.length];
+        }
+      } else {
+        clearInterval(interval);
+        message.innerText = "Hmm...進むか、戻るか、選んでください。?";
+        emojiButtons.style.display = "flex";
+        setTimeout(() => {
+          window.location.href = "007.html";
+        }, 10000);
+      }
+    }, 100);
+    let cliqueCount = 0;
+
+function contarClique() {
+  cliqueCount++;
+  if (cliqueCount === 3) {
+    document.getElementById("mensagemSecreta").style.display = "block";
+  }
+}
+
+  </script>
+
+</body>
+</html>
+
+
+
+

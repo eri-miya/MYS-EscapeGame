@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>選択の部屋 - 紙</title>
+    <link href="https://fonts.googleapis.com/css2?family=Yu+Gothic&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem;
+            font-family: 'Yu Gothic', sans-serif;
+            background: #778899;
+            color: #808080;
+            min-height: 100vh;
+            position: relative;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .whisper-hidden {
+            position: absolute;
+            top: 12px;
+            left: 20px;
+            font-size: 0.9rem;
+            color: rgba(25, 25, 25, 0.1);
+            font-style: italic;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .question {
+            position: absolute;
+            top: 15vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #ADD8E6;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(173, 216, 230, 0.8), 0 0 8px rgba(0, 0, 0, 0.5);
+            opacity: 1;
+            width: 90%;
+            max-width: 600px;
+            transition: opacity 0.5s ease-in-out;
+            line-height: 1.4;
+        }
+
+        .input-area {
+            position: fixed;
+            top: 60vh;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        input[type="text"] {
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 2px solid #D8BFD8;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            width: 100%;
+            max-width: 300px;
+            background: rgba(255, 255, 255, 0.3);
+            color: #4B0082;
+            text-align: center;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #9370DB;
+            box-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+        }
+
+        button {
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: #E0FFFF;
+            border: 2px solid #DCDCDC;
+            padding: 0.8rem 1.8rem;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 255, 255, 0.8);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #feedback {
+            position: fixed;
+            bottom: 15vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: #FFD700;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            width: 90%;
+            max-width: 500px;
+            z-index: 10;
+        }
+
+        .ambient-whisper {
+            position: fixed;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            color: rgba(255, 255, 255, 0.6);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            animation: fadeInOutWhisper 8s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 1000;
+            max-width: 150px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        #whisper-top-left { top: 10%; left: 5%; animation-delay: 0s; }
+        #whisper-top-right { top: 20%; right: 5%; animation-delay: 2s; }
+        #whisper-bottom-left { bottom: 15%; left: 8%; animation-delay: 4s; }
+        #whisper-bottom-right { bottom: 18%; right: 8%; animation-delay: 6s; }
+        #whisper-center-scroll {
+            position: absolute;
+            top: 120vh;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 1s;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+
+        @keyframes fadeInOutWhisper {
+            0% { opacity: 0; transform: scale(0.9); }
+            15% { opacity: 1; transform: scale(1); }
+            85% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.9); }
+        }
+
+        .game-feedback-whisper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #ffa;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+            pointer-events: none;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
+            z-index: 2000;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        #inventory {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 12px 18px;
+            border: 2px dashed rgba(0, 255, 255, 0.6);
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            color: #0ff;
+            font-weight: bold;
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+
+        /* Loading screen */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ADD8E6;
+            font-size: 1.2rem;
+            opacity: 0;
+            z-index: 3000;
+            text-shadow: 0 0 10px rgba(173, 216, 230, 0.8);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .question {
+                top: 20vh;
+                padding: 0 10px;
+            }
+
+            .input-area {
+                top: 65vh;
+                padding: 0 10px;
+            }
+
+            #inventory {
+                top: 10px;
+                right: 10px;
+                padding: 8px 12px;
+            }
+
+            .ambient-whisper {
+                max-width: 120px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loadingText">Carregando sala...</div>
+
+    <div id="inventory">
+        🧭 <span id="inventory-content">Vazio</span>
+    </div>
+
+    <div class="whisper-hidden">「紙の中に、鍵が隠されている…見つけられるか？」</div>
+    
+    <div class="question" id="q1">なぜ、あなたはここに来たのか？</div>
+    <div class="question" id="q2" style="display:none;">忘れたい記憶は、本当に忘れたいものですか？</div>
+    <div class="question" id="q3" style="display:none;">何も言わず、感じることはできますか？</div>
+
+    <div class="input-area">
+        <input type="text" id="answerInput" placeholder="resposta...">
+        <button id="submitButton">真実</button>
+    </div>
+
+    <div id="feedback"></div>
+    
+    <div class="ambient-whisper" id="whisper-top-left">忘れたい👾👁</div>
+    <div class="ambient-whisper" id="whisper-top-right">🪞見つけられるか？</div>
+    <div class="ambient-whisper" id="whisper-bottom-left">As paredes 👂 segredos</div>
+    <div class="ambient-whisper" id="whisper-bottom-right">迷ったときは🧭の方へ</div>
+    <div class="ambient-whisper" id="whisper-center-scroll">Perguntas sem eco...</div>
+    
+    <div class="game-feedback-whisper" id="gameFeedbackWhisper"></div>
+
+    <script>
+        class QuestionGame {
+            constructor() {
+                this.questions = ["q1", "q2", "q3"];
+                this.key = "mys-question-index";
+                this.index = parseInt(localStorage.getItem(this.key) || "0");
+                this.responded = false;
+                this.silenceTimer = null;
+                
+                this.elements = {
+                    feedback: document.getElementById("feedback"),
+                    answerInput: document.getElementById("answerInput"),
+                    submitButton: document.getElementById("submitButton"),
+                    gameFeedbackWhisper: document.getElementById("gameFeedbackWhisper"),
+                    inventoryContent: document.getElementById("inventory-content"),
+                    loading: document.getElementById("loadingText")
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.showLoading();
+                this.loadInventory();
+                this.showCurrentQuestion();
+                this.setupEventListeners();
+                this.startSilenceTimer();
+                
+                setTimeout(() => {
+                    this.hideLoading();
+                    this.showGameFeedbackWhisper("Observe. ⚖️");
+                }, 1000);
+            }
+
+            showLoading() {
+                this.elements.loading.style.opacity = 1;
+            }
+
+            hideLoading() {
+                this.elements.loading.style.opacity = 0;
+            }
+
+            loadInventory() {
+                const inventory = JSON.parse(localStorage.getItem('gameInventory')) || [];
+                if (inventory.length === 0) {
+                    this.elements.inventoryContent.textContent = 'Vazio';
+                } else {
+                    this.elements.inventoryContent.textContent = inventory.join(', ');
+                }
+            }
+
+            showCurrentQuestion() {
+                const currentQuestionElement = document.getElementById(this.questions[this.index]);
+                if (currentQuestionElement) {
+                    currentQuestionElement.style.display = "block";
+                    currentQuestionElement.style.opacity = 1;
+                }
+                
+                // Atualiza o índice para a próxima visita
+                this.index = (this.index + 1) % this.questions.length;
+                localStorage.setItem(this.key, this.index.toString());
+            }
+
+            showGameFeedbackWhisper(message, color = '#C0C0C0') {
+                this.elements.gameFeedbackWhisper.textContent = message;
+                this.elements.gameFeedbackWhisper.style.color = color;
+                this.elements.gameFeedbackWhisper.style.opacity = 1;
+                this.elements.gameFeedbackWhisper.style.transform = 'translate(-50%, -50%) scale(1)';
+                
+                clearTimeout(this.elements.gameFeedbackWhisper.hideTimeout);
+                this.elements.gameFeedbackWhisper.hideTimeout = setTimeout(() => {
+                    this.elements.gameFeedbackWhisper.style.opacity = 0;
+                    this.elements.gameFeedbackWhisper.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                }, 3000);
+            }
+
+            startSilenceTimer() {
+                clearTimeout(this.silenceTimer);
+                this.silenceTimer = setTimeout(() => {
+                    if (!this.responded) {
+                        this.handleSilentResponse();
+                    }
+                }, 10000);
+            }
+
+            handleSilentResponse() {
+                this.responded = true;
+                clearTimeout(this.silenceTimer);
+                
+                this.elements.feedback.style.color = "#87CEEB";
+                this.elements.feedback.textContent = "✅ A porta se abre...";
+                this.elements.feedback.style.opacity = 1;
+                
+                this.showGameFeedbackWhisper("👁️🧩", '#F0FFFF');
+                
+                setTimeout(() => {
+                    this.navigateTo("003.html");
+                }, 2000);
+            }
+
+            handleResponse() {
+                if (!this.responded) {
+                    this.responded = true;
+                    clearTimeout(this.silenceTimer);
+                    
+                    this.elements.feedback.style.color = "#ADD8E6";
+                    this.elements.feedback.textContent = "❌ Você falou... 🔄";
+                    this.elements.feedback.style.opacity = 1;
+                    
+                    this.showGameFeedbackWhisper("💀🌒... Pense bem.", '#FFE4E1');
+                    
+                    setTimeout(() => {
+                        this.navigateTo("000.html");
+                    }, 2000);
+                }
+            }
+
+            navigateTo(url) {
+                document.body.style.opacity = '0.5';
+                document.body.style.transition = 'opacity 0.3s ease-out';
+                
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 300);
+            }
+
+            setupEventListeners() {
+                // Clique em qualquer lugar (exceto nos elementos de input)
+                document.body.addEventListener("click", (event) => {
+                    if (!event.target.closest('.input-area')) {
+                        this.handleResponse();
+                    }
+                });
+
+                // Botão submit
+                this.elements.submitButton.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    this.handleResponse();
+                });
+
+                // Enter no input
+                this.elements.answerInput.addEventListener("keypress", (event) => {
+                    if (event.key === "Enter") {
+                        event.stopPropagation();
+                        this.handleResponse();
+                    }
+                });
+
+                // Prevenir que o clique no input acione a resposta
+                this.elements.answerInput.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                });
+            }
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            new QuestionGame();
+        });
+
+        // Tratamento de erro
+        window.addEventListener('error', (e) => {
+            console.warn('Erro capturado:', e.error);
+        });
+    </script>
+</body>
+</html>
