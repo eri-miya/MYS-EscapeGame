@@ -38,7 +38,7 @@ Cada arquivo é uma sala com seu próprio estilo, música, enigma e comportament
 ## 🌟 Como jogar
 
 > 📍 Jogue online:  
-**https://github.com/eri-miya/MYS-EscapeGame/** *(coloque o link após ativar o GitHub Pages)*
+**https://github.com/eri-miya/MYS-EscapeGame/index.html** *(coloque o link após ativar o GitHub Pages)*
 
 1. Comece pelo `index.html`
 2. Escolha entre: lanterna, chave ou papel
